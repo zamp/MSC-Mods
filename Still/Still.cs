@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml.Serialization;
-using MSCHook;
 using MSCLoader;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -18,8 +16,11 @@ namespace MSCStill
 			public float waterAmount, kiljuAmount;
 			public float solutionEthanol, solutionMethanol;
 			public bool isBroken;
+			public bool wasLitOnce;
+			public bool phoneAnswered;
 		}
 
+		public static bool stillWasLitOnce, phoneCallAnswered;
 		public float waterAmount, kiljuAmount;
 		public bool isOpen;
 		public int logCount;
@@ -122,7 +123,7 @@ namespace MSCStill
 
 			Load();
 
-			EventHook.onSaveGame += Save;
+			GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
 		}
 
 		/*void OnGUI()
@@ -144,7 +145,6 @@ namespace MSCStill
 			try
 			{
 				//DebugKeys();
-
 				m_animator.Play("BoilerWater", 0, waterAmount / 50.5f);
 				m_animator.Play("BoilerKilju", 1, kiljuAmount / 30.5f);
 				m_animator.SetBool("isOpen", isOpen);
@@ -165,6 +165,7 @@ namespace MSCStill
 
 				if (m_isLit)
 				{
+					stillWasLitOnce = true;
 					BurnWood();
 					Boil();
 					Condense();
@@ -190,7 +191,9 @@ namespace MSCStill
 				waterAmount = waterAmount,
 				solutionEthanol = m_solutionEthanol,
 				solutionMethanol = m_solutionMethanol,
-				isBroken = transform.FindChild("Broken").gameObject.activeSelf
+				isBroken = transform.FindChild("Broken").gameObject.activeSelf,
+				wasLitOnce = stillWasLitOnce,
+				phoneAnswered = phoneCallAnswered
 			};
 
 			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "still.xml");
@@ -208,6 +211,8 @@ namespace MSCStill
 			kiljuAmount = data.kiljuAmount;
 			m_solutionEthanol = data.solutionEthanol;
 			m_solutionMethanol = data.solutionMethanol;
+			stillWasLitOnce = data.wasLitOnce;
+			phoneCallAnswered = data.phoneAnswered;
 
 			if (data.isBroken)
 			{

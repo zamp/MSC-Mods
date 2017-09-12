@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
 using System.IO;
-using System.Xml.Serialization;
-using MSCHook;
 using MSCLoader;
 using UnityEngine;
 
@@ -41,7 +39,7 @@ namespace MSCStill
 			m_plugCollider = transform.FindChild("PlugTrigger").GetComponent<Collider>();
 
 			Load();
-			EventHook.onSaveGame += Save;
+			GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
 		}
 
 		// Update is called once per frame

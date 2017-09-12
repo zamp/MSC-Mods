@@ -31,11 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
     <Reference Include="cInput">
       <HintPath>..\..\..\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\cInput.dll</HintPath>
-    </Reference>
-    <Reference Include="EventHook">
-      <HintPath>..\..\..\Steam\steamapps\common\My Summer Car\Mods\EventHook.dll</HintPath>
     </Reference>
     <Reference Include="MSCLoader">
       <HintPath>..\..\..\Steam\steamapps\common\My Summer Car\mysummercar_Data\Managed\MSCLoader.dll</HintPath>
@@ -54,7 +54,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioClipContainer.cs" />
     <Compile Include="Bottle.cs" />
+    <Compile Include="Buyer.cs" />
+    <Compile Include="GameHook.cs" />
     <Compile Include="ModBehaviour.cs" />
     <Compile Include="MSCStill.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,6 +67,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MSCStill\bin\Release\MSCStill.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
+    <PostBuildEvent>copy "E:\Projects\Games\MSC Mods\Still\bin\Release\MSCStill.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
