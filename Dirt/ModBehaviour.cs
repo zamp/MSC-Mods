@@ -202,7 +202,7 @@ namespace MSCDirtMod
 
 		void OnDestroy()
 		{
-			File.WriteAllText(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod/dirt.txt"), m_bodyDirtCutoff + "|" + m_windowWipeAmount + "|" + m_wheelDirtCutoff);
+			m_bundle.Unload(true);
 		}
 
 		private void DebugKeys()
