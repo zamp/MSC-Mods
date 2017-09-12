@@ -4,6 +4,12 @@ using System.Linq;
 using HutongGames.PlayMaker;
 using UnityEngine;
 
+/* Usage:
+// save game event
+GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
+*/
+
+
 namespace CHANGEME
 {
 	public class GameHook

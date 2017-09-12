@@ -53,12 +53,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BucketTrigger.cs" />
+    <Compile Include="GameHook.cs" />
     <Compile Include="ModBehaviour.cs" />
     <Compile Include="MSCDirtMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SaveUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MSCDirtMod\MSCDirtMod\bin\Release\MSCDirtMod.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
+    <PostBuildEvent>copy "E:\Projects\Games\MSC Mods\Dirt\bin\Release\MSCDirtMod.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

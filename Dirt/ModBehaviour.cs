@@ -15,6 +15,13 @@ namespace MSCDirtMod
 {
 	public class ModBehaviour : MonoBehaviour
 	{
+		public class SaveData
+		{
+			public float bodyDirtCutoff;
+			public float windowWipeAmount;
+			public float wheelDirtCutoff;
+		}
+
 		private static AssetBundle m_bundle;
 		private Transform m_wiperPivot;
 		private float m_oldWiperAngle;
@@ -67,6 +74,32 @@ namespace MSCDirtMod
 		void Start()
 		{
 			StartCoroutine(SetupMod());
+			Load();
+			GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
+		}
+
+		private void Save()
+		{
+			var data = new SaveData
+			{
+				bodyDirtCutoff = m_bodyDirtCutoff,
+				windowWipeAmount = m_windowWipeAmount,
+				wheelDirtCutoff = m_wheelDirtCutoff
+			};
+			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.xml");
+			SaveUtil.SerializeWriteFile(data, path);
+		}
+
+		private void Load()
+		{
+			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.xml");
+			if (!File.Exists(path))
+				return;
+
+			var data = SaveUtil.DeserializeReadFile<SaveData>(path);
+			m_bodyDirtCutoff = data.bodyDirtCutoff;
+			m_windowWipeAmount = data.windowWipeAmount;
+			m_wheelDirtCutoff = data.wheelDirtCutoff;
 		}
 
 		private IEnumerator SetupMod()
@@ -100,16 +133,6 @@ namespace MSCDirtMod
 
 			ModConsole.Print("Dirt mod doing final setup...");
 			m_rainAudioSource = GameObject.Find("PLAYER/Pivot/Camera/FPSCamera/FPSCamera/AudioRain").GetComponent<AudioSource>();
-			// load values
-			var file = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.txt");
-			if (File.Exists(file))
-			{
-				var values = File.ReadAllText(file).Split('|');
-				m_bodyDirtCutoff = (float) Convert.ToDouble(values[0]);
-				m_windowWipeAmount = (float) Convert.ToDouble(values[1]);
-				if (values.Length > 2)
-					m_wheelDirtCutoff = (float) Convert.ToDouble(values[2]);
-			}
 
 			m_satsuma = GameObject.Find("SATSUMA(557kg)");
 			m_carDynamics = m_satsuma.GetComponentInChildren<CarDynamics>();
