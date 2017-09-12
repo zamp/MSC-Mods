@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Temp\Compiled-StandardSpecular.shader">
+    <Files>
+      <File FileName="Assets\Shaders\WindowDirtShader.shader" Line="1" Column="1" />
+      <File FileName="Temp\Compiled-StandardSpecular.shader" Line="1" Column="1" />
+      <File FileName="Assets\Shaders\BodyDirtShader.shader" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

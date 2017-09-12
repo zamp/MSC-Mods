@@ -1,0 +1,3 @@
+﻿1 00:00:00:00 00:00:03:27 The Bold and the Beautiful, as seen on tv, ice cream is now in stores!
+2 00:00:03:28 00:00:07:48 Flavors, chocolate and cheesecake, American style!
+3 00:00:07:48 00:00:13:44 Ahh! Tastes fantastic! Even Ridge will like this!

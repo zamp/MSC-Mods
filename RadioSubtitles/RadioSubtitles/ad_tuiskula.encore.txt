@@ -1,0 +1,5 @@
+﻿1 00:00:00:13 00:00:02:28 You cannot miss this gig!
+2 00:00:02:28 00:00:08:07 In Nivala's Tuiskula, 15th of July, E-Type, DJ Bobo and Captain Jack.
+3 00:00:08:07 00:00:10:39 Warmup by Alivieska's own boy, Rauski.
+4 00:00:10:39 00:00:15:12 Order your ticket now from 07005234523.
+5 00:00:15:12 00:00:19:27 I'll see you in Tuiskula!

@@ -1,0 +1,6 @@
+﻿1 00:00:00:00 00:00:03:44 Beer I can drink.
+2 00:00:03:44 00:00:07:25 As we sit in a rink.
+3 00:00:07:26 00:00:11:25 Ask each other, hey, yo?
+4 00:00:11:25 00:00:17:54 And listen to the radio.
+5 00:00:17:54 00:00:22:40 Alivieska's local radio 91MHz
+6 00:00:22:40 00:00:27:51 From baby to grandpa. Fits all.

@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{ECEE0A84-AF1B-BE31-D8AE-C4CE303FAD9D}") = "Shaders", "Assembly-CSharp-Editor-vs.csproj", "{686B15FA-F91C-781C-F0EE-342160EDB390}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{686B15FA-F91C-781C-F0EE-342160EDB390}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{686B15FA-F91C-781C-F0EE-342160EDB390}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{686B15FA-F91C-781C-F0EE-342160EDB390}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{686B15FA-F91C-781C-F0EE-342160EDB390}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+																																					GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+
+EndGlobal

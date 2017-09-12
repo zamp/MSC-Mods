@@ -1,0 +1,165 @@
+fileFormatVersion: 2
+guid: ba554eae891457441aa1a56a39bc0304
+timeCreated: 1504847306
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Boiler
+    100004: Hat
+    100006: Kilju
+    100008: Palju
+    100010: Pipe
+    100012: Pipe2
+    100014: Stand1
+    100016: Stand2
+    100018: Water
+    100020: Coals
+    100022: BoilerCollider
+    100024: PaljuCollider
+    100026: BoilerBroken
+    100028: Cylinder
+    100030: Moonshine
+    100032: Funnel
+    100034: Plug
+    100036: MoonshineCollider
+    100038: MoonshineBottle
+    100040: Liquid
+    400000: Boiler
+    400002: //RootNode
+    400004: Hat
+    400006: Kilju
+    400008: Palju
+    400010: Pipe
+    400012: Pipe2
+    400014: Stand1
+    400016: Stand2
+    400018: Water
+    400020: Coals
+    400022: BoilerCollider
+    400024: PaljuCollider
+    400026: BoilerBroken
+    400028: Cylinder
+    400030: Moonshine
+    400032: Funnel
+    400034: Plug
+    400036: MoonshineCollider
+    400038: MoonshineBottle
+    400040: Liquid
+    2300000: Boiler
+    2300002: Hat
+    2300004: Kilju
+    2300006: Palju
+    2300008: Pipe
+    2300010: Pipe2
+    2300012: Stand1
+    2300014: Stand2
+    2300016: Water
+    2300018: Coals
+    2300020: BoilerCollider
+    2300022: PaljuCollider
+    2300024: BoilerBroken
+    2300026: Cylinder
+    2300028: Moonshine
+    2300030: Funnel
+    2300032: Plug
+    2300034: MoonshineCollider
+    2300036: MoonshineBottle
+    2300038: Liquid
+    3300000: Boiler
+    3300002: Hat
+    3300004: Kilju
+    3300006: Palju
+    3300008: Pipe
+    3300010: Pipe2
+    3300012: Stand1
+    3300014: Stand2
+    3300016: Water
+    3300018: Coals
+    3300020: BoilerCollider
+    3300022: PaljuCollider
+    3300024: BoilerBroken
+    3300026: Cylinder
+    3300028: Moonshine
+    3300030: Funnel
+    3300032: Plug
+    3300034: MoonshineCollider
+    3300036: MoonshineBottle
+    3300038: Liquid
+    4300000: Kilju
+    4300002: Water
+    4300004: Stand2
+    4300006: Palju
+    4300008: Pipe2
+    4300010: Hat
+    4300012: Boiler
+    4300014: Coals
+    4300016: PaljuCollider
+    4300018: BoilerCollider
+    4300020: BoilerBroken
+    4300022: Cylinder
+    4300024: Moonshine
+    4300026: Funnel
+    4300028: Plug
+    4300030: MoonshineCollider
+    4300032: MoonshineBottle
+    4300034: Liquid
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: nuihger97t0yy9dg5tre9yt5gy9hdtg59hy
+  assetBundleVariant: 
