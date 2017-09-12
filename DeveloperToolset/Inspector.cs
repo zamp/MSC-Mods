@@ -341,7 +341,35 @@ namespace DeveloperToolset
 				try
 				{
 					var fieldValue = fieldInfo.GetValue(comp);
-					GUILayout.Label(fieldInfo.Name + ": " + fieldValue);
+					var fieldValueStr = fieldValue.ToString();
+					if (fieldValue is bool)
+					{
+						GUILayout.Label(fieldInfo.Name);
+						var val = GUILayout.Toggle((bool) fieldValue, fieldInfo.Name);
+						fieldInfo.SetValue(comp, val);
+					}
+					else if (fieldValue is string)
+					{
+						GUILayout.Label(fieldInfo.Name);
+						var val = GUILayout.TextField((string) fieldValue);
+						fieldInfo.SetValue(comp, val);
+					}
+					else if (fieldValue is int)
+					{
+						GUILayout.Label(fieldInfo.Name);
+						var val = Convert.ToInt32(GUILayout.TextField(fieldValue.ToString()));
+						fieldInfo.SetValue(comp, val);
+					}
+					else if (fieldValue is float)
+					{
+						GUILayout.Label(fieldInfo.Name);
+						var val = (float) Convert.ToDouble(GUILayout.TextField(fieldValue.ToString()));
+						fieldInfo.SetValue(comp, val);
+					}
+					else
+					{
+						GUILayout.Label(fieldInfo.Name + ": " + fieldValueStr);
+					}
 				}
 				catch (Exception)
 				{
