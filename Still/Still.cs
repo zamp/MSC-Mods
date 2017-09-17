@@ -355,7 +355,7 @@ namespace MSCStill
 			var diff = (Time.deltaTime * (m_temperature / 75f)) / 200f;
 
 			// this math should leave bottle at ~60% alcohol
-			if (kiljuAmount > 0 && m_temperature >= 100f)
+			if (kiljuAmount > 0 && m_temperature >= 101f)
 			{
 				m_pressure += diff * 3f;
 			}
