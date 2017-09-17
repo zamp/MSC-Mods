@@ -62,6 +62,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MobilePhone\bin\Release\MobilePhone.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
+    <PostBuildEvent>copy "E:\Projects\Games\MSC Mods\MobilePhone\bin\Release\MobilePhone.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

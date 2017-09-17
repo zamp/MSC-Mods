@@ -7,10 +7,11 @@ namespace MobilePhone
 	public class MobilePhone : Mod
 	{
 		private bool m_isLoaded = false;
+		private AssetBundle m_bundle;
 		public override string ID { get { return "MSCMobilePhone"; } }
 		public override string Name { get { return "Mobile Phone"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1"; } }
+		public override string Version { get { return "0.2.4"; } }
 
 		public override void OnLoad()
 		{
@@ -34,6 +35,7 @@ namespace MobilePhone
 			}
 			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
 			{
+				m_bundle.Unload(true);
 				m_isLoaded = false;
 			}
 		}
@@ -57,10 +59,20 @@ namespace MobilePhone
 			}
 			else
 			{
-				var bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(path));
+				m_bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(path));
+				var prefab = m_bundle.LoadAsset<GameObject>("PhonePrefab");
+				
+				var headPhone = GameObject.Instantiate(prefab);
+				GameObject.Destroy(headPhone.GetComponent<Collider>());
+				GameObject.Destroy(headPhone.GetComponent<Rigidbody>());
+				headPhone.transform.SetParent(GameObject.Find("PLAYER/Pivot/Camera/FPSCamera").transform, false);
+				headPhone.transform.localPosition = new Vector3(0.2f, -0.05f, 0.1f);
+				headPhone.transform.localRotation = Quaternion.Euler(new Vector3(300, 355, 0));
+				headPhone.transform.localScale = new Vector3(1,1,1);
+				headPhone.gameObject.SetActive(false);
 
-				var phone = GameObject.Instantiate(bundle.LoadAsset<GameObject>("PhonePrefab"));
-				phone.AddComponent<PhoneBehaviour>();
+				var phone = GameObject.Instantiate(prefab);
+				phone.AddComponent<PhoneBehaviour>().headPhone = headPhone;
 
 				ModConsole.Print("Mobile Phone mod Setup!");
 			}
