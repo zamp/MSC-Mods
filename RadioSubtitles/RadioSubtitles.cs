@@ -59,7 +59,10 @@ namespace RadioSubtitles
 				{
 					if (!m_isLoaded)
 					{
-						m_missing = File.ReadAllLines(Path.Combine(ModLoader.ModsFolder, "RadioSubtitles/missing.txt")).ToList();
+						var path = Path.Combine(ModLoader.ModsFolder, "RadioSubtitles/missing.txt");
+						m_missing = new List<string>();
+						if (File.Exists(path))
+							m_missing = File.ReadAllLines(path).ToList();
 
 						if (GameObject.Find("RadioChannels/Channel1") == null)
 							return;

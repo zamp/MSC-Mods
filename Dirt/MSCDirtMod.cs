@@ -9,7 +9,7 @@ namespace MSCDirtMod
 		public override string ID { get { return "MSCDirtMod"; } }
 		public override string Name { get { return "Dirt Mod"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "1.8.4"; } }
+		public override string Version { get { return "1.8.5"; } }
 
 		public static Keybind keyMoreDirt = new Keybind("moredirt", "More Dirt", KeyCode.KeypadPlus, KeyCode.LeftControl);
 		public static Keybind keyLessDirt = new Keybind("lessdirt", "Less Dirt", KeyCode.KeypadMinus, KeyCode.LeftControl);

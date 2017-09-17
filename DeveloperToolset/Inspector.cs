@@ -471,7 +471,13 @@ namespace DeveloperToolset
 								var fieldValue = fieldInfo.GetValue(action);
 								var fieldValueStr = fieldValue.ToString();
 								fieldValueStr = fieldValueStr.Substring(fieldValueStr.LastIndexOf(".", System.StringComparison.Ordinal) + 1);
-								if (fieldValue is NamedVariable)
+								if (fieldValue is FsmProperty)
+								{
+									var property = fieldValue as FsmProperty;
+									GUILayout.Label(fieldInfo.Name + ": (" + property.PropertyName + ")");
+									GUILayout.Label("target: " + property.TargetObject + "");
+								}
+								else if (fieldValue is NamedVariable)
 								{
 									var named = fieldValue as NamedVariable;
 									GUILayout.Label(fieldInfo.Name + ": " + fieldValueStr + "(" + named.Name + ")");

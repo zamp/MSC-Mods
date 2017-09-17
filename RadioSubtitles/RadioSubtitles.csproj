@@ -50,6 +50,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MSCRadioSubtitles\bin\Release\RadioSubtitles.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
+    <PostBuildEvent>copy "E:\Projects\Games\MSC Mods\RadioSubtitles\bin\Release\RadioSubtitles.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>
