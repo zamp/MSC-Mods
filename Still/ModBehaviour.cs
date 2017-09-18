@@ -27,9 +27,15 @@ namespace MSCStill
 			buyerByeBye,
 			buyerAsk,
 			buyerStory;
+		private GameObject m_drinkBottlePrefab;
+		private Animation m_drinkHandAnimation;
+		private Transform m_drinkHand;
+		private GameObject m_drinkBottle;
+		private Transform m_handBottles;
 
 		void Awake()
 		{
+			Instance = this;
 			try
 			{
 				ModPath = Path.Combine(ModLoader.ModsFolder, "MSCStill");
@@ -86,6 +92,7 @@ namespace MSCStill
 			m_stillPrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("StillPrefab")[0];
 			m_bottlePrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("BottlePrefab")[0];
 			m_buyerPrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("BuyerPrefab")[0];
+			m_drinkBottlePrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("DrinkBottlePrefab")[0];
 
 			buyerGreet = new AudioClipContainer();
 			buyerGreet.AddClip(m_bundle.LoadAsset<AudioClip>("Greet1"));
@@ -161,6 +168,37 @@ namespace MSCStill
 			var buyer = Instantiate(m_buyerPrefab).AddComponent<Buyer>();
 			buyer.transform.position = new Vector3(-1527.8f, 5.158f, 1388.8f);
 			buyer.transform.rotation = Quaternion.Euler(new Vector3(0, 270, 0));
+
+			ModConsole.Print("Setting up drink bottle...");
+			m_drinkHand = GameObject.Find("PLAYER/Pivot/Camera/FPSCamera/FPSCamera/Drink").transform.FindChild("Hand");
+			m_drinkHandAnimation = m_drinkHand.GetComponent<Animation>();
+			m_handBottles = m_drinkHand.transform.FindChild("HandBottles");
+
+			var beer = m_drinkHand.transform.FindChild("BeerBottle");
+			m_drinkBottle = Instantiate(m_drinkBottlePrefab);
+			m_drinkBottle.transform.SetParent(beer.parent);
+			m_drinkBottle.transform.localPosition = new Vector3(0.33f, 0.14f, 0f);
+			m_drinkBottle.transform.localRotation = Quaternion.Euler(90f, 180f, 0f);
+			m_drinkBottle.SetActive(false);
 		}
+
+		public void DrinkMoonshine()
+		{
+			StartCoroutine(Drink());
+		}
+
+		private IEnumerator Drink()
+		{
+			m_handBottles.gameObject.SetActive(true);
+			m_drinkBottle.SetActive(true);
+			m_drinkHand.gameObject.SetActive(true);
+			m_drinkHandAnimation.Play("drink_rotate");
+			yield return new WaitForSeconds(m_drinkHandAnimation.GetClip("drink_rotate").length);
+			m_drinkBottle.SetActive(false);
+			m_drinkHand.gameObject.SetActive(false);
+			m_handBottles.gameObject.SetActive(false);
+		}
+
+		public static ModBehaviour Instance { get; set; }
 	}
 }

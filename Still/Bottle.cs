@@ -27,7 +27,7 @@ namespace MSCStill
 		{
 			m_liquid = transform.FindChild("Liquid");
 			// these two things make this object carriable (probably)
-			gameObject.name = "Moonshine Bottle(Clone)";
+			gameObject.name = "Pontikka Bottle(Clone)";
 			gameObject.layer = LayerMask.NameToLayer("Parts");
 			gameObject.tag = "PART";
 
@@ -80,12 +80,25 @@ namespace MSCStill
 			}
 		}
 
+		public void RemoveAmount(float amount)
+		{
+			var drinkEthanol = ethanol / total * amount;
+			var drinkMethanol = methanol / total * amount;
+			var drinkWater = water / total * amount;
+
+			water -= drinkWater;
+			methanol -= drinkMethanol;
+			ethanol -= drinkEthanol;
+		}
+
 		private IEnumerator Drink()
 		{
 			var bottle = transform.FindChild("Bottle").gameObject;
 			var liquid = transform.FindChild("Liquid").gameObject;
 			var plug = transform.FindChild("Plug").gameObject;
 			var funnel = transform.FindChild("Funnel").gameObject;
+
+			ModBehaviour.Instance.DrinkMoonshine();
 
 			bottle.SetActive(false);
 			liquid.SetActive(false);
@@ -103,11 +116,6 @@ namespace MSCStill
 			methanol -= drinkMethanol;
 			ethanol -= drinkEthanol;
 
-			bottle.SetActive(true);
-			liquid.SetActive(true);
-			plug.SetActive(true);
-			funnel.SetActive(funnelActive);
-
 			var boost = drinkEthanol * 6f;
 			while (boost > 0)
 			{
@@ -115,6 +123,13 @@ namespace MSCStill
 				PlayMakerGlobals.Instance.Variables.FindFsmFloat("PlayerDrunk").Value += Time.deltaTime;
 				yield return null;
 			}
+
+			yield return new WaitForSeconds(5f);
+
+			bottle.SetActive(true);
+			liquid.SetActive(true);
+			plug.SetActive(true);
+			funnel.SetActive(funnelActive);
 			
 			if (drinkEthanol < drinkMethanol) // more methanol than ethanol = d�d
 			{

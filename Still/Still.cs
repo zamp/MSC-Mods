@@ -13,15 +13,15 @@ namespace MSCStill
 		[Serializable]
 		public class SaveData
 		{
-			public float waterAmount, kiljuAmount;
-			public float solutionEthanol, solutionMethanol;
+			public float waterAmount;
+			public float solutionEthanol, solutionMethanol, solutionWater;
 			public bool isBroken;
 			public bool wasLitOnce;
 			public bool phoneAnswered;
 		}
 
 		public static bool stillWasLitOnce, phoneCallAnswered;
-		public float waterAmount, kiljuAmount;
+		public float waterAmount;
 		public bool isOpen;
 		public int logCount;
 
@@ -29,6 +29,7 @@ namespace MSCStill
 		private Transform[] m_logs;
 
 		private float m_temperature,
+			m_solutionWater,
 			m_solutionMethanol,
 			m_solutionEthanol,
 			m_vaporMethanol,
@@ -62,6 +63,7 @@ namespace MSCStill
 		private float m_liquidWater;
 		private float m_vaporWater;
 		private Collider m_kiljuTrigger;
+		public float total;
 
 		private void Awake()
 		{
@@ -78,7 +80,7 @@ namespace MSCStill
 
 			transform.FindChild("Working/LogTrigger").gameObject.AddComponent<TriggerCallback>().onTriggerEnter += OnLogTrigger;
 			transform.FindChild("Working/KiljuTrigger").gameObject.AddComponent<TriggerCallback>().onTriggerEnter += OnKiljuTrigger;
-			transform.FindChild("Working/WaterTrigger").gameObject.AddComponent<TriggerCallback>().onTriggerEnter += OnWaterTrigger;
+			transform.FindChild("Working/WaterTrigger").gameObject.AddComponent<TriggerCallback>().onTriggerStay += OnWaterTrigger;
 			
 			var dripTriggers = transform.FindChild("Working/DripTrigger").gameObject.AddComponent<TriggerCallback>();
 			dripTriggers.onTriggerEnter += OnDripTriggerEnter;
@@ -144,10 +146,14 @@ namespace MSCStill
 				return;
 			try
 			{
-				//DebugKeys();
+				total = m_solutionWater + m_solutionEthanol + m_solutionMethanol;
+
+				DebugKeys();
 				m_animator.Play("BoilerWater", 0, waterAmount / 50.5f);
-				m_animator.Play("BoilerKilju", 1, kiljuAmount / 30.5f);
+				m_animator.Play("BoilerKilju", 1, total / 30.5f);
 				m_animator.SetBool("isOpen", isOpen);
+
+				m_logTrigger.tag = m_isLit ? "Fire" : "Untagged";
 
 				Interact();
 
@@ -187,7 +193,7 @@ namespace MSCStill
 		{
 			var data = new SaveData
 			{
-				kiljuAmount = kiljuAmount,
+				solutionWater = m_solutionWater,
 				waterAmount = waterAmount,
 				solutionEthanol = m_solutionEthanol,
 				solutionMethanol = m_solutionMethanol,
@@ -208,7 +214,7 @@ namespace MSCStill
 
 			var data = SaveUtil.DeserializeReadFile<SaveData>(path);
 			waterAmount = data.waterAmount;
-			kiljuAmount = data.kiljuAmount;
+			m_solutionWater = data.solutionWater;
 			m_solutionEthanol = data.solutionEthanol;
 			m_solutionMethanol = data.solutionMethanol;
 			stillWasLitOnce = data.wasLitOnce;
@@ -261,7 +267,7 @@ namespace MSCStill
 			m_woodTimer -= Time.deltaTime;
 			if (m_woodTimer < 0)
 			{
-				m_woodTimer = Random.Range(60f, 120f);
+				m_woodTimer = Random.Range(90f, 180f);
 				logCount--;
 				if (logCount <= 0)
 				{
@@ -271,52 +277,35 @@ namespace MSCStill
 			}
 
 			m_temperature += (Time.deltaTime * (logCount * logCount)) / 8f; // five wood adds 0.23 C per second
-			m_temperature -= Time.deltaTime / 6f; // loses heat 1 celsius per 10 seconds
-
-			if (isOpen && m_temperature > 100 && kiljuAmount > 0)
-			{
-				// can't go over 100 if there's something left to boil
-				m_temperature = 100;
-			}
+			m_temperature -= Time.deltaTime / 6f; // loses heat 0.1 celsius per second
 		}
 
 		private void Condense()
 		{
-			var gains = (Time.deltaTime * (waterAmount / 50f)) / 200f;
+			// remove some cooling water
+			waterAmount -= GetTargetEvaporationRate(m_temperature, 90f, 50f) * Time.deltaTime * 0.05f;
+			var gains = Mathf.Clamp01(waterAmount / 40f);
 
 			m_dripLeft.enableEmission = false;
 			m_dripRight.enableEmission = false;
 
 			if (m_vaporMethanol > 0)
 			{
-				m_liquidMethanol += gains;
-				m_vaporMethanol -= gains;
-				waterAmount -= gains;
-				if (m_vaporMethanol < 0)
-					m_vaporMethanol = 0;
-
+				m_liquidMethanol += m_vaporMethanol * gains;
 				m_dripLeft.enableEmission = true;
 				m_dripRight.enableEmission = true;
 			}
+
 			if (m_vaporEthanol > 0)
 			{
-				m_liquidEthanol += gains;
-				m_vaporEthanol -= gains;
-				waterAmount -= gains;
-				if (m_vaporEthanol < 0)
-					m_vaporEthanol = 0;
-
+				m_liquidEthanol += m_vaporEthanol * gains;
 				m_dripLeft.enableEmission = true;
 				m_dripRight.enableEmission = true;
 			}
+
 			if (m_vaporWater > 0)
 			{
-				m_liquidWater += gains;
-				m_vaporWater -= gains;
-				waterAmount -= gains;
-				if (m_liquidWater < 0)
-					m_liquidWater = 0;
-
+				m_liquidWater += m_vaporWater * gains;
 				m_dripLeft.enableEmission = true;
 				m_dripRight.enableEmission = true;
 			}
@@ -327,6 +316,7 @@ namespace MSCStill
 				m_bottle.ethanol += m_liquidEthanol;
 				m_bottle.methanol += m_liquidMethanol;
 			}
+
 			m_vaporMethanol = 0;
 			m_vaporEthanol = 0;
 			m_vaporWater = 0;
@@ -340,74 +330,118 @@ namespace MSCStill
 		{
 			if (isOpen)
 			{
+				// safety
 				m_pressure = 1;
+				if (m_temperature > 100 && total > 0)
+				{
+					// can't go over 100 if there's something left to boil
+					m_temperature = 100;
+				}
 			}
+			else
+			{
+				// "unsafety"
+				if (total > 0 && m_temperature >= 101f)
+					m_pressure += 0.1f * Time.deltaTime;
+				else
+					m_pressure -= 0.1f * Time.deltaTime;
+
+				if (m_pressure > 6)
+					Explode();
+			}
+
+			if (m_pressure < 1)
+				m_pressure = 1;
 
 			m_overPressure.enableEmission = m_pressure > 1f;
 			m_overPressure.emissionRate = 8f * m_pressure;
 			m_overPressure.startSpeed = m_pressure / 2f;
 
-			if (m_pressure > 3)
-			{
-				Explode();
-			}
 
-			var diff = (Time.deltaTime * (m_temperature / 75f)) / 200f;
-
-			// this math should leave bottle at ~60% alcohol
-			if (kiljuAmount > 0 && m_temperature >= 101f)
-			{
-				m_pressure += diff * 3f;
-			}
-			else
-			{
-				m_pressure -= diff;
-				if (m_pressure < 1)
-					m_pressure = 1;
-			}
-
-			if (m_temperature > 65f && m_solutionMethanol > 0f)
-			{
-				m_solutionMethanol -= diff;
-				kiljuAmount -= diff;
-				if (!isOpen)
-				{
-					m_vaporMethanol += diff;
-					m_vaporWater += diff;
-				}
-				// on low medium heat keep temperature static
-				if (logCount <= 3 && m_temperature > 65f)
-					m_temperature += (65f - m_temperature) * Time.deltaTime;
-			}
-
-			if (m_temperature > 78.4f && m_solutionEthanol > 0f)
-			{
-				m_solutionEthanol -= diff;
-				kiljuAmount -= diff;
-				if (!isOpen)
-				{
-					m_vaporEthanol += diff;
-					m_vaporWater += diff;
-				}
-				// on low medium heat keep temperature static
-				if (logCount <= 3 && m_temperature > 78.4f)
-					m_temperature += (78.4f - m_temperature) * Time.deltaTime;
-			}
-
-			if (m_temperature > 100f && kiljuAmount > 0)
-			{
-				kiljuAmount -= Time.deltaTime / 60f;
-				m_vaporWater += Time.deltaTime / 60f;
-				// on low medium heat keep temperature static
-				if (logCount <= 3)
-					m_temperature += (100f - m_temperature) * Time.deltaTime;
-			}
+			BoilMethanol();
+			BoilEthanol();
+			BoilWater();
 
 			var basevol = 0f;
 			if (m_vaporEthanol > 0 || m_vaporMethanol > 0 || m_vaporWater > 0)
-				basevol = 0.01f;
+				basevol = 0.04f;
 			m_gonnaBlowAudioSource.volume = basevol + (m_pressure - 1f);
 			m_gonnaBlowAudioSource.pitch = 1f + ((m_pressure - 1f) * 0.3f);
+		}
+
+		private float GetTargetEvaporationRate(float current, float target, float range)
+		{
+			if (current > target)
+				return 1f;
+			var linear = (range - Mathf.Abs(target - current)) / range;
+			linear = linear > 0 ? linear : 0;
+			return linear * linear;
+		}
+
+		private void BoilMethanol()
+		{
+			if (m_solutionMethanol <= 0)
+				return;
+
+			var evaporationRate = GetTargetEvaporationRate(m_temperature, 69f, 10f);
+			if (evaporationRate > 0.5f && m_isLit)
+			{
+				// stabilize temperature when we're boiling at 50% efficiency
+				m_temperature += (65f - m_temperature) * Time.deltaTime;
+			}
+
+			// how many litres per second
+			evaporationRate *= 0.2f * Time.deltaTime * (m_solutionMethanol / total);
+
+			m_solutionMethanol -= evaporationRate;
+			if (!isOpen)
+			{
+				m_vaporMethanol += evaporationRate;
+			}
+		}
+
+		private void BoilEthanol()
+		{
+			if (m_solutionEthanol <= 0)
+				return;
+
+			var evaporationRate = GetTargetEvaporationRate(m_temperature, 85f, 10f);
+			if (evaporationRate > 0.5f && m_isLit)
+			{
+				// stabilize temperature when we're boiling at 50% efficiency
+				m_temperature += (78.4f - m_temperature) * Time.deltaTime;
+			}
+
+			// how many litres per second
+			evaporationRate *= 0.2f * Time.deltaTime * (m_solutionEthanol / total);
+
+			m_solutionEthanol -= evaporationRate;
+			if (!isOpen)
+			{
+				m_vaporEthanol += evaporationRate;
+			}
+		}
+
+		private void BoilWater()
+		{
+			if (total <= 0)
+				return;
+
+			var evaporationRate = GetTargetEvaporationRate(m_temperature, 100f, 25f);
+			if (evaporationRate > 0.5f && m_isLit)
+			{
+				// stabilize temperature when we're boiling at 50% efficiency
+				m_temperature += (100f - m_temperature) * Time.deltaTime;
+			}
+
+			// how many litres per second
+			evaporationRate *= 0.2f * Time.deltaTime * (m_solutionWater / total);
+
+			m_solutionWater -= evaporationRate;
+			if (!isOpen)
+			{
+				m_vaporWater += evaporationRate;
+			}
 		}
 
 		private void Explode()
@@ -418,7 +452,9 @@ namespace MSCStill
 			m_temperature = 20f;
 			m_explodeAudioClip.Play();
 			m_explodeParticleSystem.Emit(500);
-			kiljuAmount = 0;
+			m_solutionWater = 0;
+			m_solutionEthanol = 0;
+			m_solutionMethanol = 0;
 			m_gonnaBlowAudioSource.Stop();
 
 			var things = Physics.OverlapSphere(transform.position, 15f);
@@ -454,14 +490,16 @@ namespace MSCStill
 			var hits = Physics.RaycastAll(ray, 2f);
 			foreach (var raycastHit in hits)
 			{
-				if (raycastHit.collider == m_kiljuTrigger && isOpen && kiljuAmount > 0)
+				if (raycastHit.collider == m_kiljuTrigger && isOpen && total > 0)
 				{
 					PlayMakerGlobals.Instance.Variables.FindFsmBool("GUIuse").Value = true;
 					PlayMakerGlobals.Instance.Variables.FindFsmString("GUIinteraction").Value = "Empty out";
 
 					if (cInput.GetButtonDown("Use"))
 					{
-						kiljuAmount = 0;
+						m_solutionWater = 0;
+						m_solutionEthanol = 0;
+						m_solutionMethanol = 0;
 					}
 				}
 				if (raycastHit.collider == m_hatTrigger)
@@ -477,7 +515,8 @@ namespace MSCStill
 						else
 							Close();
 					}
-				} else if (raycastHit.collider == m_logTrigger)
+				}
+				else if (raycastHit.collider == m_logTrigger)
 				{
 					if (logCount > 0 && !m_isLit)
 					{
@@ -503,7 +542,7 @@ namespace MSCStill
 			if (m_pressure > 1.5f)
 			{
 				m_releasePressureAudioSource.Play();
-				kiljuAmount /= m_pressure;
+				m_solutionWater /= m_pressure;
 				m_solutionEthanol /= m_pressure;
 				m_solutionMethanol /= m_pressure;
 				m_temperature -= 100f;
@@ -517,16 +556,19 @@ namespace MSCStill
 			if (obj.name.StartsWith("water bucket"))
 			{
 				var fsm = obj.transform.FindChild("Water").GetComponent<PlayMakerFSM>();
-				var amount = fsm.FsmVariables.GetFsmFloat("Water").Value;
+				var amount = fsm.FsmVariables.GetFsmFloat("Water").Value * Time.deltaTime;
 				if (AddWater(amount))
 				{
-					fsm.FsmVariables.GetFsmFloat("Water").Value = 0;
+					fsm.FsmVariables.GetFsmFloat("Water").Value -= Time.deltaTime;
 				}
 			}
 		}
 
 		private void OnKiljuTrigger(Collider obj)
 		{
+			if (!isOpen)
+				return;
+
 			if (obj.name.StartsWith("water bucket"))
 			{
 				var fsm = obj.transform.FindChild("Water").GetComponent<PlayMakerFSM>();
@@ -554,6 +596,34 @@ namespace MSCStill
 					}
 				}
 			}
+
+			if (obj.name.StartsWith("bucket"))
+			{
+				var fsm = obj.GetComponents<PlayMakerFSM>().FirstOrDefault(x => x.FsmName == "Use");
+				var alcohol = fsm.FsmVariables.GetFsmFloat("Alcohol");
+				var water = fsm.FsmVariables.GetFsmFloat("Water");
+
+				var added = AddAnyKilju(water.Value, alcohol.Value);
+				water.Value -= added;
+				transform.FindChild("Working/KiljuTrigger").GetComponent<AudioSource>().Play();
+			}
+
+			var bottle = obj.GetComponent<Bottle>();
+			if (bottle != null)
+			{
+				if (total + bottle.total < 30)
+				{
+					m_solutionWater += bottle.water;
+					m_solutionEthanol += bottle.ethanol;
+					m_solutionMethanol += bottle.methanol;
+
+					bottle.ethanol = 0;
+					bottle.methanol = 0;
+					bottle.water = 0;
+
+					transform.FindChild("Working/KiljuTrigger").GetComponent<AudioSource>().Play();
+				}
+			}
 		}
 
 		private void OnLogTrigger(Collider obj)
@@ -575,14 +645,24 @@ namespace MSCStill
 			}
 		}
 
+		private float AddAnyKilju(float kilju, float vol)
+		{
+			var amount = kilju - total;
+			amount = amount > 0 ? amount : 0;
+			m_solutionMethanol += 0.1f * vol * amount;
+			m_solutionEthanol += amount * vol;
+			m_solutionWater += amount * (1-vol);
+			return amount;
+		}
+
 		private bool AddKilju(float kilju, float vol)
 		{
 			ModConsole.Print("add kilju with " + vol);
-			if (kiljuAmount + kilju <= 30f)
+			if (total + kilju <= 30f)
 			{
-				m_solutionMethanol += 0.02f * kilju;
+				m_solutionMethanol += 0.1f * vol * kilju;
 				m_solutionEthanol += vol * kilju;
-				kiljuAmount += kilju;
+				m_solutionWater += kilju * (1 - vol);
 				return true;
 			}
 			return false;
