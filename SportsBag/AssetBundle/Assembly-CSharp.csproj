@@ -46,7 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Simple Bones\Scripts\SimpleBones.cs" />
+     <Compile Include="Assets\fixer.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>E:/Programs/Unity 5.0.0f4/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

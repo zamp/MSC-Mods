@@ -11,25 +11,35 @@ ModelImporter:
     100006: SportsBagCollider
     100008: SportsBagColliderTop
     100010: Strap
+    100012: Cube
+    100014: Hand
     400000: BezierCurve
     400002: //RootNode
     400004: SportsBag
     400006: SportsBagCollider
     400008: SportsBagColliderTop
     400010: Strap
+    400012: Cube
+    400014: Hand
     2300000: BezierCurve
     2300002: SportsBagCollider
     2300004: SportsBagColliderTop
     2300006: Strap
+    2300008: Cube
+    2300010: Hand
     3300000: BezierCurve
     3300002: SportsBagCollider
     3300004: SportsBagColliderTop
     3300006: Strap
+    3300008: Cube
+    3300010: Hand
     4300000: SportsBagCollider
     4300002: SportsBagColliderTop
     4300004: BezierCurve
     4300006: SportsBag
     4300008: Strap
+    4300010: Cube
+    4300012: Hand
     9500000: //RootNode
     13700000: SportsBag
   materials:
@@ -51,7 +61,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 100
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

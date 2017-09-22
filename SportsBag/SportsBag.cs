@@ -15,7 +15,7 @@ namespace SportsBag
 		public override string ID { get { return "SportsBag"; } }
 		public override string Name { get { return "SportsBag"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1"; } }
+		public override string Version { get { return "0.3"; } }
 
 		public override void Update()
 		{
