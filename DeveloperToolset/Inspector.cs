@@ -284,7 +284,6 @@ namespace DeveloperToolset
 			catch (Exception e)
 			{
 				ModConsole.Print(e.ToString());
-				throw;
 			}
 		}
 
@@ -320,6 +319,10 @@ namespace DeveloperToolset
 					{
 						FSMGUI(comp);
 					}
+					else if (comp is Light)
+					{
+						LightGUI(comp as Light);
+					}
 					else
 					{
 						GenericsGUI(comp,flags);
@@ -327,6 +330,14 @@ namespace DeveloperToolset
 				}
 				GUILayout.EndVertical();
 			}
+		}
+
+		private static void LightGUI(Light light)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Shadow bias:");
+			light.shadowBias = (float) Convert.ToDouble(GUILayout.TextField(light.shadowBias.ToString()));
+			GUILayout.EndHorizontal();
 		}
 
 		private static void GenericsGUI(Component comp, BindingFlags flags)
