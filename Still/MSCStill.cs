@@ -9,7 +9,7 @@ namespace MSCStill
 		public override string ID { get { return "MSCStill"; } }
 		public override string Name { get { return "Still"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "1.0.1"; } }
+		public override string Version { get { return "1.0.5"; } }
 
 		public override void OnLoad()
 		{

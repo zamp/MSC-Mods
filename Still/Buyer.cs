@@ -177,7 +177,7 @@ namespace MSCStill
 
 		private void OnBottleTriggerExit(Collider obj)
 		{
-			if (obj.gameObject.name.StartsWith("Moonshine"))
+			if (obj.GetComponent<Bottle>())
 			{
 				m_waitForBottleLeaveTrigger = false;
 			}
@@ -187,7 +187,7 @@ namespace MSCStill
 		{
 			if (m_waitForBottleLeaveTrigger)
 				return;
-			if (obj.gameObject.name.StartsWith("Moonshine"))
+			if (obj.GetComponent<Bottle>())
 			{
 				StartCoroutine(TasteTest(obj.gameObject.GetComponent<Bottle>()));
 			}

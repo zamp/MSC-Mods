@@ -64,6 +64,7 @@ namespace MSCStill
 		private float m_vaporWater;
 		private Collider m_kiljuTrigger;
 		public float total;
+		private Transform m_tempNeedle;
 
 		private void Awake()
 		{
@@ -123,6 +124,8 @@ namespace MSCStill
 
 			m_woodTimer = Random.Range(60f, 120f);
 
+			m_tempNeedle = transform.FindChild("Working/TempGauge/Needle");
+
 			Load();
 
 			GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
@@ -148,7 +151,14 @@ namespace MSCStill
 			{
 				total = m_solutionWater + m_solutionEthanol + m_solutionMethanol;
 
-				DebugKeys();
+				var a = ((m_temperature - 20f) / 100f) * 222f;
+				if (a > 230f)
+				{
+					a = Random.Range(230f, 235f);
+				}
+				m_tempNeedle.localRotation = Quaternion.Euler(0, 0, a);
+
+				//DebugKeys();
 				m_animator.Play("BoilerWater", 0, waterAmount / 50.5f);
 				m_animator.Play("BoilerKilju", 1, total / 30.5f);
 				m_animator.SetBool("isOpen", isOpen);
@@ -272,11 +282,12 @@ namespace MSCStill
 				if (logCount <= 0)
 				{
 					m_isLit = false;
+					m_fireAudioSource.Stop();
 					logCount = 0;
 				}
 			}
 
-			m_temperature += (Time.deltaTime * (logCount * logCount)) / 8f; // five wood adds 0.23 C per second
+			m_temperature += (Time.deltaTime * (logCount * logCount)) / 12f;
 			m_temperature -= Time.deltaTime / 6f; // loses heat 0.1 celsius per second
 		}
 
@@ -358,9 +369,46 @@ namespace MSCStill
 			m_overPressure.startSpeed = m_pressure / 2f;
 
 
-			BoilMethanol();
-			BoilEthanol();
-			BoilWater();
+			var methanolEvaporationRate = GetTargetEvaporationRate(m_temperature, 65f, 10f);
+			var ethanolEvaporationRate = GetTargetEvaporationRate(m_temperature, 78.4f, 10f);
+			var waterEvaporationRate = GetTargetEvaporationRate(m_temperature, 100f, 25f);
+
+			if (m_solutionMethanol <= 0)
+				methanolEvaporationRate = 0;
+			if (m_solutionEthanol <= 0)
+				ethanolEvaporationRate = 0;
+			if (m_solutionWater <= 0)
+				waterEvaporationRate = 0;
+
+			if (m_isLit)
+			{
+				if (methanolEvaporationRate > 0f && m_temperature > 65f)
+					m_temperature -= Time.deltaTime * methanolEvaporationRate * 0.4f;
+				if (ethanolEvaporationRate > 0f && m_temperature > 78.4f)
+					m_temperature -= Time.deltaTime * ethanolEvaporationRate * 0.4f;
+				if (waterEvaporationRate > 0f && m_temperature > 100f)
+					m_temperature -= Time.deltaTime * waterEvaporationRate * 0.4f;
+			}
+
+			var totalEvaporation = methanolEvaporationRate + ethanolEvaporationRate + waterEvaporationRate;
+			if (totalEvaporation > 0)
+			{
+				// how many litres per second
+				methanolEvaporationRate *= 0.01f * Time.deltaTime * (methanolEvaporationRate / totalEvaporation);
+				ethanolEvaporationRate *= 0.01f * Time.deltaTime * (ethanolEvaporationRate / totalEvaporation);
+				waterEvaporationRate *= 0.01f * Time.deltaTime * (waterEvaporationRate / totalEvaporation);
+
+				m_solutionMethanol -= methanolEvaporationRate;
+				m_solutionEthanol -= ethanolEvaporationRate;
+				m_solutionWater -= waterEvaporationRate;
+
+				if (!isOpen)
+				{
+					m_vaporMethanol += methanolEvaporationRate;
+					m_vaporEthanol += ethanolEvaporationRate;
+					m_vaporWater += waterEvaporationRate;
+				}
+			}
 
 			var basevol = 0f;
 			if (m_vaporEthanol > 0 || m_vaporMethanol > 0 || m_vaporWater > 0)
@@ -376,72 +424,6 @@ namespace MSCStill
 			var linear = (range - Mathf.Abs(target - current)) / range;
 			linear = linear > 0 ? linear : 0;
 			return linear * linear;
-		}
-
-		private void BoilMethanol()
-		{
-			if (m_solutionMethanol <= 0)
-				return;
-
-			var evaporationRate = GetTargetEvaporationRate(m_temperature, 69f, 10f);
-			if (evaporationRate > 0.5f && m_isLit)
-			{
-				// stabilize temperature when we're boiling at 50% efficiency
-				m_temperature += (65f - m_temperature) * Time.deltaTime;
-			}
-
-			// how many litres per second
-			evaporationRate *= 0.2f * Time.deltaTime * (m_solutionMethanol / total);
-
-			m_solutionMethanol -= evaporationRate;
-			if (!isOpen)
-			{
-				m_vaporMethanol += evaporationRate;
-			}
-		}
-
-		private void BoilEthanol()
-		{
-			if (m_solutionEthanol <= 0)
-				return;
-
-			var evaporationRate = GetTargetEvaporationRate(m_temperature, 85f, 10f);
-			if (evaporationRate > 0.5f && m_isLit)
-			{
-				// stabilize temperature when we're boiling at 50% efficiency
-				m_temperature += (78.4f - m_temperature) * Time.deltaTime;
-			}
-
-			// how many litres per second
-			evaporationRate *= 0.2f * Time.deltaTime * (m_solutionEthanol / total);
-
-			m_solutionEthanol -= evaporationRate;
-			if (!isOpen)
-			{
-				m_vaporEthanol += evaporationRate;
-			}
-		}
-
-		private void BoilWater()
-		{
-			if (total <= 0)
-				return;
-
-			var evaporationRate = GetTargetEvaporationRate(m_temperature, 100f, 25f);
-			if (evaporationRate > 0.5f && m_isLit)
-			{
-				// stabilize temperature when we're boiling at 50% efficiency
-				m_temperature += (100f - m_temperature) * Time.deltaTime;
-			}
-
-			// how many litres per second
-			evaporationRate *= 0.2f * Time.deltaTime * (m_solutionWater / total);
-
-			m_solutionWater -= evaporationRate;
-			if (!isOpen)
-			{
-				m_vaporWater += evaporationRate;
-			}
 		}
 
 		private void Explode()
@@ -469,11 +451,20 @@ namespace MSCStill
 			transform.FindChild("Working").gameObject.SetActive(false);
 			transform.FindChild("Broken").gameObject.SetActive(true);
 
+			// properly kill player
+			/*var deathFsm = GameObject.Find("Systems").transform.FindChild("Death").GetComponent<PlayMakerFSM>();
+			GameHook.InjectStateHook(deathFsm.gameObject, "State 3", DeathHook, 5);*/
+
 			var player = GameObject.Find("PLAYER");
 			if (Vector3.Distance(player.transform.position, transform.position) < 5f)
 			{
 				PlayMakerFSM.BroadcastEvent("DEATH");
 			}
+		}
+
+		private void DeathHook()
+		{
+			
 		}
 
 		private void StartFire()
@@ -486,6 +477,9 @@ namespace MSCStill
 
 		private void Interact()
 		{
+			if (Camera.main == null)
+				return;
+
 			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			var hits = Physics.RaycastAll(ray, 2f);
 			foreach (var raycastHit in hits)

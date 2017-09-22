@@ -26,6 +26,8 @@ ModelImporter:
     100036: MoonshineCollider
     100038: MoonshineBottle
     100040: Liquid
+    100042: TempGauge
+    100044: TempGaugeNeedle
     400000: Boiler
     400002: //RootNode
     400004: Hat
@@ -47,6 +49,8 @@ ModelImporter:
     400036: MoonshineCollider
     400038: MoonshineBottle
     400040: Liquid
+    400042: TempGauge
+    400044: TempGaugeNeedle
     2300000: Boiler
     2300002: Hat
     2300004: Kilju
@@ -67,6 +71,8 @@ ModelImporter:
     2300034: MoonshineCollider
     2300036: MoonshineBottle
     2300038: Liquid
+    2300040: TempGauge
+    2300042: TempGaugeNeedle
     3300000: Boiler
     3300002: Hat
     3300004: Kilju
@@ -87,6 +93,8 @@ ModelImporter:
     3300034: MoonshineCollider
     3300036: MoonshineBottle
     3300038: Liquid
+    3300040: TempGauge
+    3300042: TempGaugeNeedle
     4300000: Kilju
     4300002: Water
     4300004: Stand2
@@ -105,6 +113,8 @@ ModelImporter:
     4300030: MoonshineCollider
     4300032: MoonshineBottle
     4300034: Liquid
+    4300036: TempGaugeNeedle
+    4300038: TempGauge
   materials:
     importMaterials: 1
     materialName: 0

@@ -1,0 +1,127 @@
+fileFormatVersion: 2
+guid: 81e5aea786030284ca9f43a7e4b50899
+timeCreated: 1505994977
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Magazine1
+    100002: Magazine2
+    100004: Magazine3
+    100006: Magazine4
+    100008: Magazine5
+    100010: //RootNode
+    100012: Rack
+    100014: RackBottom
+    100016: RackMiddle
+    100018: RackTop
+    100020: Magazine
+    100022: RackTop.001
+    100024: RackMiddle.001
+    400000: Magazine1
+    400002: Magazine2
+    400004: Magazine3
+    400006: Magazine4
+    400008: Magazine5
+    400010: //RootNode
+    400012: Rack
+    400014: RackBottom
+    400016: RackMiddle
+    400018: RackTop
+    400020: Magazine
+    400022: RackTop.001
+    400024: RackMiddle.001
+    2300000: Magazine1
+    2300002: Magazine2
+    2300004: Magazine3
+    2300006: Magazine4
+    2300008: Magazine5
+    2300010: Rack
+    2300012: RackBottom
+    2300014: RackMiddle
+    2300016: RackTop
+    2300018: Magazine
+    2300020: RackTop.001
+    2300022: RackMiddle.001
+    3300000: Magazine1
+    3300002: Magazine2
+    3300004: Magazine3
+    3300006: Magazine4
+    3300008: Magazine5
+    3300010: Rack
+    3300012: RackBottom
+    3300014: RackMiddle
+    3300016: RackTop
+    3300018: Magazine
+    3300020: RackTop.001
+    3300022: RackMiddle.001
+    4300000: Magazine5
+    4300002: Magazine3
+    4300004: Magazine4
+    4300006: Magazine2
+    4300008: RackTop
+    4300010: Magazine1
+    4300012: Rack
+    4300014: Magazine
+    4300016: RackTop.001
+    4300018: RackMiddle
+    4300020: RackMiddle.001
+    4300022: RackBottom
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: gebijosjht4hse6f987y96e8h7
+  assetBundleVariant: 

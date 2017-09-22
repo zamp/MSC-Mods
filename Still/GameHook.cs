@@ -24,19 +24,19 @@ namespace MSCStill
 			}
 		}
 
-		public static void InjectStateHook(GameObject gameObject, string stateName, FsmStateAction customStateAction)
+		public static void InjectStateHook(GameObject gameObject, string stateName, FsmStateAction customStateAction, int index = 0)
 		{
 			var state = GetStateFromGameObject(gameObject, stateName);
 			if (state != null)
 			{
 				// inject our hook action to the state machine
 				var actions = new List<FsmStateAction>(state.Actions);
-				actions.Insert(0, customStateAction);
+				actions.Insert(index, customStateAction);
 				state.Actions = actions.ToArray();
 			}
 		}
 
-		public static void InjectStateHook(GameObject gameObject, string stateName, Action hook)
+		public static void InjectStateHook(GameObject gameObject, string stateName, Action hook, int index = 0)
 		{
 			var state = GetStateFromGameObject(gameObject, stateName);
 			if (state != null)
@@ -45,7 +45,7 @@ namespace MSCStill
 				var actions = new List<FsmStateAction>(state.Actions);
 				var hookAction = new FsmHookAction();
 				hookAction.hook = hook;
-				actions.Insert(0, hookAction);
+				actions.Insert(index, hookAction);
 				state.Actions = actions.ToArray();
 			}
 		}
