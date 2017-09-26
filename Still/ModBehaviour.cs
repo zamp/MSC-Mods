@@ -32,6 +32,7 @@ namespace MSCStill
 		private Transform m_drinkHand;
 		private GameObject m_drinkBottle;
 		private Transform m_handBottles;
+		private GameObject m_alcometerPrefab;
 
 		void Awake()
 		{
@@ -93,6 +94,7 @@ namespace MSCStill
 			m_bottlePrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("BottlePrefab")[0];
 			m_buyerPrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("BuyerPrefab")[0];
 			m_drinkBottlePrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("DrinkBottlePrefab")[0];
+			m_alcometerPrefab = m_bundle.LoadAssetWithSubAssets<GameObject>("AlcoholometerPrefab")[0];
 
 			buyerGreet = new AudioClipContainer();
 			buyerGreet.AddClip(m_bundle.LoadAsset<AudioClip>("Greet1"));
@@ -156,6 +158,7 @@ namespace MSCStill
 
 			buyerStory = new AudioClipContainer();
 			buyerStory.AddClip(m_bundle.LoadAsset<AudioClip>("Story1"));
+			buyerStory.AddClip(m_bundle.LoadAsset<AudioClip>("Story2"));
 		}
 
 		private void SetupGameObjects()
@@ -180,6 +183,9 @@ namespace MSCStill
 			m_drinkBottle.transform.localPosition = new Vector3(0.33f, 0.14f, 0f);
 			m_drinkBottle.transform.localRotation = Quaternion.Euler(90f, 180f, 0f);
 			m_drinkBottle.SetActive(false);
+
+			ModConsole.Print("Setting up alcoholometer");
+			Instantiate(m_alcometerPrefab).AddComponent<Alcoholometer>();
 		}
 
 		public void DrinkMoonshine()

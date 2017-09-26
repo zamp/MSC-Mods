@@ -40,6 +40,7 @@ namespace MSCStill
 			{"Payment4", "Wait a sec, I'll get some, here. That's for the effort."},
 			{"PhoneCall", ""},
 			{"Story1", "My job is soooo damn easy. All I do is sit in a room and push some buttons. Sometimes you need to clean a little and these coveralls...\nIt ain't human shit. I dunno what it is. Haven't cleaned them in a year, but I still do wear them every day."},
+			{"Story2", "You're not going to believe this, couple days ago a coworker went to the toilet and I redirected waste into the toilet network at 30 bar pressure!\nThe shit flew out of the toilet so fast it reached the ceiling! Holy shit the guy was pissed off! He was so pissed off!"},
 			{"TasteMoonshine1", "Ah! You brought moonshine. Let's taste!"},
 			{"TasteMoonshine2", "Ah! Almost full! Let's taste!"},
 			{"TasteMoonshine3", "Well then! Let's taste!"},

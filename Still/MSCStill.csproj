@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alcoholometer.cs" />
     <Compile Include="AudioClipContainer.cs" />
     <Compile Include="Bottle.cs" />
     <Compile Include="Buyer.cs" />

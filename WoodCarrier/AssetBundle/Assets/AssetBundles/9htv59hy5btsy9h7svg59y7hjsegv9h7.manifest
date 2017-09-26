@@ -1,0 +1,40 @@
+ManifestFileVersion: 0
+CRC: 7526718
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: f52910ac67d5df4698a8144c8407b390
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c9f4c416f9dc0b201b97a384c7e3e192
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/WoodCarrier.fbx
+- Assets/Prefabs/WoodCarrierPrefab.prefab
+- Assets/Textures/WoodCarrier.png
+- Assets/Textures/WoodCarrierNormal.png
+- Assets/Models/Materials/WoodCarrierMaterial.mat
+Dependencies: []

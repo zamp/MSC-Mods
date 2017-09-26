@@ -1,0 +1,70 @@
+ManifestFileVersion: 0
+CRC: 1854058754
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: daf481d77a0d395beb53557617e37002
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 39bd99f236055ea7fcabcdf09278730e
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+Assets:
+- Assets/Models/Explosives.fbx
+- Assets/Textures/Box.png
+- Assets/Sounds/OpenClose.ogg
+- Assets/Sounds/Fuse.ogg
+- Assets/Sounds/UnderwaterBoom.ogg
+- Assets/Animations/Dynamite.controller
+- Assets/Materials/Bubbles.mat
+- Assets/Animations/Close.anim
+- Assets/Sounds/Explosion.ogg
+- Assets/Models/Materials/BoxMaterial.mat
+- Assets/Animations/ExplosivesPrefabController.controller
+- Assets/Textures/Dynamite.png
+- Assets/Textures/Explosion.png
+- Assets/Models/Materials/DynamiteMaterial.mat
+- Assets/Animations/BurnFuse.anim
+- Assets/Materials/Explosion.mat
+- Assets/Animations/Open.anim
+- Assets/Textures/Smoke.png
+- Assets/Prefabs/ExplosivesPrefab.prefab
+- Assets/Materials/Smoke.mat
+- Assets/Textures/Bubble.png
+Dependencies: []

@@ -28,6 +28,8 @@ ModelImporter:
     100040: Liquid
     100042: TempGauge
     100044: TempGaugeNeedle
+    100046: AlcometerBobber
+    100048: AlcometerTube
     400000: Boiler
     400002: //RootNode
     400004: Hat
@@ -51,6 +53,8 @@ ModelImporter:
     400040: Liquid
     400042: TempGauge
     400044: TempGaugeNeedle
+    400046: AlcometerBobber
+    400048: AlcometerTube
     2300000: Boiler
     2300002: Hat
     2300004: Kilju
@@ -73,6 +77,8 @@ ModelImporter:
     2300038: Liquid
     2300040: TempGauge
     2300042: TempGaugeNeedle
+    2300044: AlcometerBobber
+    2300046: AlcometerTube
     3300000: Boiler
     3300002: Hat
     3300004: Kilju
@@ -95,6 +101,8 @@ ModelImporter:
     3300038: Liquid
     3300040: TempGauge
     3300042: TempGaugeNeedle
+    3300044: AlcometerBobber
+    3300046: AlcometerTube
     4300000: Kilju
     4300002: Water
     4300004: Stand2
@@ -115,6 +123,8 @@ ModelImporter:
     4300034: Liquid
     4300036: TempGaugeNeedle
     4300038: TempGauge
+    4300040: AlcometerBobber
+    4300042: AlcometerTube
   materials:
     importMaterials: 1
     materialName: 0

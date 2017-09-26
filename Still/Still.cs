@@ -179,10 +179,13 @@ namespace MSCStill
 				m_smallFire.gameObject.SetActive(m_isLit);
 				m_bigFire.gameObject.SetActive(m_isLit && logCount >= 5);
 
+				m_temperature += (Time.deltaTime * (logCount * logCount)) / 12f;
+				m_temperature -= Time.deltaTime / 6f; // loses heat 0.1 celsius per second
+
 				if (m_isLit)
 				{
-					stillWasLitOnce = true;
 					BurnWood();
+					stillWasLitOnce = true;
 					Boil();
 					Condense();
 					FlickerLights();
@@ -212,17 +215,22 @@ namespace MSCStill
 				phoneAnswered = phoneCallAnswered
 			};
 
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "still.xml");
-			SaveUtil.SerializeWriteFile(data, path);
+			SaveUtil.SerializeWriteFile(data, SaveFilePath);
 		}
 
 		private void Load()
 		{
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "still.xml");
-			if (!File.Exists(path))
+			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "still.xml");
+			if (File.Exists(oldPath))
+			{
+				// migrate save
+				File.Move(oldPath, SaveFilePath);
+			}
+
+			if (!File.Exists(SaveFilePath))
 				return;
 
-			var data = SaveUtil.DeserializeReadFile<SaveData>(path);
+			var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);
 			waterAmount = data.waterAmount;
 			m_solutionWater = data.solutionWater;
 			m_solutionEthanol = data.solutionEthanol;
@@ -286,9 +294,6 @@ namespace MSCStill
 					logCount = 0;
 				}
 			}
-
-			m_temperature += (Time.deltaTime * (logCount * logCount)) / 12f;
-			m_temperature -= Time.deltaTime / 6f; // loses heat 0.1 celsius per second
 		}
 
 		private void Condense()
@@ -368,10 +373,9 @@ namespace MSCStill
 			m_overPressure.emissionRate = 8f * m_pressure;
 			m_overPressure.startSpeed = m_pressure / 2f;
 
-
 			var methanolEvaporationRate = GetTargetEvaporationRate(m_temperature, 65f, 10f);
 			var ethanolEvaporationRate = GetTargetEvaporationRate(m_temperature, 78.4f, 10f);
-			var waterEvaporationRate = GetTargetEvaporationRate(m_temperature, 100f, 25f);
+			var waterEvaporationRate = GetTargetEvaporationRate(m_temperature, 100f, 45f);
 
 			if (m_solutionMethanol <= 0)
 				methanolEvaporationRate = 0;
@@ -545,6 +549,11 @@ namespace MSCStill
 			}
 		}
 
+		public void ShutoffReleasePressure()
+		{
+			m_releasePressure.enableEmission = false;
+		}
+
 		private void OnWaterTrigger(Collider obj)
 		{
 			if (obj.name.StartsWith("water bucket"))
@@ -693,6 +702,11 @@ namespace MSCStill
 				bottle.ShowFunnel(true);
 				bottle.ShowPlug(false);
 			}
+		}
+
+		public string SaveFilePath
+		{
+			get { return Path.Combine(Application.persistentDataPath, "mscstill_still.xml"); }
 		}
 	}
 }

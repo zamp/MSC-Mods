@@ -38,6 +38,8 @@ namespace MSCStill
 		private float m_ringTimer;
 		private float m_ringDelay;
 		private float m_greetTimer = 180f;
+		private Transform m_headBone;
+		private bool m_lookAtPlayer;
 
 		void Awake()
 		{
@@ -80,8 +82,21 @@ namespace MSCStill
 			state.Actions = actions.ToArray();
 			m_ringFsm.gameObject.SetActive(false);
 
+			m_headBone = transform.FindChild("Pivot/skeleton/pelvis/spine_middle/spine_upper/head");
+
 			//m_ringDelay = Random.Range(750f, 3600f);
 			m_ringDelay = 60f;
+			m_lookAtPlayer = true;
+		}
+
+		void LateUpdate()
+		{
+			// look at camera
+			if (Camera.main != null && m_lookAtPlayer)
+			{
+				m_headBone.LookAt(Camera.main.transform.position);
+				m_headBone.Rotate(0, -90, -90);
+			}
 		}
 
 		void Update()
@@ -189,6 +204,7 @@ namespace MSCStill
 				return;
 			if (obj.GetComponent<Bottle>())
 			{
+				StopAllCoroutines();
 				StartCoroutine(TasteTest(obj.gameObject.GetComponent<Bottle>()));
 			}
 		}
@@ -203,25 +219,44 @@ namespace MSCStill
 			ModBehaviour.buyerTaste.PlayClipThrough(m_audioSource);
 			yield return new WaitForSeconds(m_audioSource.clip.length);
 			m_animator.Play("BuyerDrink");
+			m_lookAtPlayer = false;
 			yield return new WaitForSeconds(1.9f);
+			m_lookAtPlayer = true;
 
-			var vol = bottle.ethanol / bottle.total;
-
-			if (bottle.methanol > 0.2f)
+			var ethanolPercentage = bottle.ethanol / bottle.total;
+			var methanolPercentage = bottle.methanol / bottle.total;
+			var ethanolMethanolRatio = ethanolPercentage / (methanolPercentage + 0.000001f);
+			if (bottle.total < 0.01f)
 			{
-				// too much methanol
-				StartCoroutine(Methanol(bottle));
+				// empty
+				StartCoroutine(Empty(bottle));
 			}
-			else if (vol < 0.4f)
+			else if (ethanolPercentage < 0.3f)
 			{
 				// it's water
 				StartCoroutine(Water(bottle));
+			}
+			else if (ethanolMethanolRatio < 20)
+			{
+				// too much methanol
+				StartCoroutine(Methanol(bottle));
 			}
 			else
 			{
 				// it's good!
 				StartCoroutine(Good(bottle));
 			}
+		}
+
+		private IEnumerator Empty(Bottle bottle)
+		{
+			PlayMakerGlobals.Instance.Variables.FindFsmString("GUIsubtitle").Value = "It's empty?";
+			yield return new WaitForSeconds(1f);
+
+			m_waitForBottleLeaveTrigger = true;
+			bottle.gameObject.SetActive(true);
+			m_bottle.SetActive(false);
+			m_animator.SetBool("NoBottle", true);
 		}
 
 		private IEnumerator Methanol(Bottle bottle)
@@ -268,7 +303,10 @@ namespace MSCStill
 			// show the money
 			m_money.SetActive(true);
 
-			var money = Mathf.Floor(bottle.ethanol * 10) * 100;
+			var ethanolPercentage = bottle.ethanol / bottle.total;
+			var money = Mathf.Floor(ethanolPercentage * bottle.total * 120) * 10;
+			if (float.IsNaN(money))
+				money = 0;
 
 			while (true)
 			{
@@ -302,7 +340,7 @@ namespace MSCStill
 
 			yield return new WaitForSeconds(2f);
 
-			if (Random.value < 0.2f)
+			if (Random.value < 0.3f)
 			{
 				ModBehaviour.buyerStory.PlayClipThrough(m_audioSource);
 				yield return new WaitForSeconds(m_audioSource.clip.length);

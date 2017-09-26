@@ -153,17 +153,22 @@ namespace MSCStill
 				rotZ = transform.rotation.eulerAngles.z
 			};
 
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "bottle.xml");
-			SaveUtil.SerializeWriteFile(data, path);
+			SaveUtil.SerializeWriteFile(data, SaveFilePath);
 		}
 
 		private void Load()
 		{
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "bottle.xml");
-			if (!File.Exists(path))
+			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "bottle.xml");
+			if (File.Exists(oldPath))
+			{
+				// migrate file
+				File.Move(oldPath, SaveFilePath);
+			}
+
+			if (!File.Exists(SaveFilePath))
 				return;
 
-			var data = SaveUtil.DeserializeReadFile<SaveData>(path);
+			var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);
 			water = data.water;
 			ethanol = data.ethanol;
 			methanol = data.methanol;
@@ -179,6 +184,11 @@ namespace MSCStill
 		public void ShowPlug(bool show)
 		{
 			m_plug.SetActive(show);
+		}
+
+		public string SaveFilePath
+		{
+			get { return Path.Combine(Application.persistentDataPath, "mscstill_bottle.xml"); }
 		}
 	}
 }

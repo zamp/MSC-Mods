@@ -564,7 +564,13 @@ namespace DeveloperToolset
 				GUILayout.Label("Events");
 				foreach (var evnt in fsm.FsmEvents)
 				{
+					GUILayout.BeginHorizontal();
 					GUILayout.Label(evnt.Name + ": " + evnt.Path);
+					if (GUILayout.Button("Send"))
+					{
+						fsm.SendEvent(evnt.Name);
+					}
+					GUILayout.EndHorizontal();
 				}
 			}
 

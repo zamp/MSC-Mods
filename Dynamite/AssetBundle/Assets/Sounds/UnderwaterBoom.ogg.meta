@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 8c7278f3959a5e040b75e940e5cf25b0
+timeCreated: 1506236894
+licenseType: Pro
+AudioImporter:
+  serializedVersion: 6
+  defaultSettings:
+    loadType: 0
+    sampleRateSetting: 0
+    sampleRateOverride: 0
+    compressionFormat: 1
+    quality: 1
+    conversionMode: 0
+  platformSettingOverrides: {}
+  forceToMono: 0
+  preloadAudioData: 1
+  loadInBackground: 0
+  3D: 1
+  userData: 
+  assetBundleName: hrt4vy97nsvgy9h7sbgy9h7bdg597y
+  assetBundleVariant: 

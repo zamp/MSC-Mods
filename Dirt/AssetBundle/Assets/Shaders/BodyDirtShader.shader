@@ -4,7 +4,7 @@ Shader "DirtShader"
 	{
 		 _Color ("Color", Color) = (1,1,1,1)
 		 _MainTex ("Albedo", 2D) = "white" { }
-		 _DirtTex ("Albedo", 2D) = "white" { }
+		 _DirtTex ("Dirt Texture", 2D) = "white" { }
 		 _Cutoff ("Alpha Cutoff", Range(0,1)) = 0.5
 		 _Glossiness ("Smoothness", Range(0,1)) = 0.5
 		 _SpecColor ("Specular", Color) = (0.2,0.2,0.2,1)

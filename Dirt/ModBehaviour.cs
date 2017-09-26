@@ -70,9 +70,16 @@ namespace MSCDirtMod
 		private Material m_oldBooMaterial;
 		private bool m_halt = false;
 		private bool m_isSetup;
+		private static ModBehaviour m_instance;
 
-		void Start()
+		public static ModBehaviour Instance
 		{
+			get { return m_instance; }
+		}
+
+		private void Start()
+		{
+			m_instance = this;
 			StartCoroutine(SetupMod());
 			Load();
 			GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
@@ -86,27 +93,30 @@ namespace MSCDirtMod
 				windowWipeAmount = m_windowWipeAmount,
 				wheelDirtCutoff = m_wheelDirtCutoff
 			};
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.xml");
-			SaveUtil.SerializeWriteFile(data, path);
+			SaveUtil.SerializeWriteFile(data, SaveFilePath);
 		}
 
 		private void Load()
 		{
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.xml");
-			if (!File.Exists(path))
-				return;
-
-			var data = SaveUtil.DeserializeReadFile<SaveData>(path);
-			m_bodyDirtCutoff = data.bodyDirtCutoff;
-			m_windowWipeAmount = data.windowWipeAmount;
-			m_wheelDirtCutoff = data.wheelDirtCutoff;
+			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.xml");
+			if (File.Exists(oldPath))
+			{
+				File.Move(oldPath, SaveFilePath);
+			}
+			if (File.Exists(SaveFilePath))
+			{
+				var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);
+				m_bodyDirtCutoff = data.bodyDirtCutoff;
+				m_windowWipeAmount = data.windowWipeAmount;
+				m_wheelDirtCutoff = data.wheelDirtCutoff;
+			}
 		}
 
 		private IEnumerator SetupMod()
 		{
 			while (GameObject.Find("PLAYER") == null ||
-				    GameObject.Find("SATSUMA(557kg)") == null ||
-					GameObject.Find("PLAYER/Pivot/Camera/FPSCamera/FPSCamera/AudioRain") == null)
+			       GameObject.Find("SATSUMA(557kg)") == null ||
+			       GameObject.Find("PLAYER/Pivot/Camera/FPSCamera/FPSCamera/AudioRain") == null)
 			{
 				yield return null;
 			}
@@ -178,7 +188,7 @@ namespace MSCDirtMod
 			m_rimsDirtTexture = m_bundle.LoadAsset<Texture2D>("RimsDirt");
 		}
 
-		void Update()
+		private void Update()
 		{
 			try
 			{
@@ -200,7 +210,7 @@ namespace MSCDirtMod
 			}
 		}
 
-		void OnDestroy()
+		private void OnDestroy()
 		{
 			m_bundle.Unload(true);
 		}
@@ -275,8 +285,10 @@ namespace MSCDirtMod
 
 		private void SetupMisc()
 		{
-			SwapMiscPartMaterial("Body/pivot_fender_right/fender right(Clone)/pivot_flares_fr/fender flare fr(Clone)", m_genericDirtTexture);
-			SwapMiscPartMaterial("Body/pivot_fender_left/fender left(Clone)/pivot_flares_fl/fender flare fl(Clone)", m_genericDirtTexture);
+			SwapMiscPartMaterial("Body/pivot_fender_right/fender right(Clone)/pivot_flares_fr/fender flare fr(Clone)",
+				m_genericDirtTexture);
+			SwapMiscPartMaterial("Body/pivot_fender_left/fender left(Clone)/pivot_flares_fl/fender flare fl(Clone)",
+				m_genericDirtTexture);
 			SwapMiscPartMaterial("Body/pivot_flares_rr/fender flare rr(Clone)", m_genericDirtTexture);
 			SwapMiscPartMaterial("Body/pivot_flares_rl/fender flare rl(Clone)", m_genericDirtTexture);
 			SwapMiscPartMaterial("Body/pivot_grille/grille(Clone)", m_genericDirtTexture);
@@ -354,7 +366,7 @@ namespace MSCDirtMod
 					var dirtOutside = SwapWindowMaterialShaderDirt(mr.materials[0], flipMaterials ? 1 : -1);
 					mr.shadowCastingMode = ShadowCastingMode.On;
 					mr.receiveShadows = true;
-					mr.materials = new[] { dirtInside, dirtOutside };
+					mr.materials = new[] {dirtInside, dirtOutside};
 					m_transparentMaterials.Add(dirtInside);
 					m_transparentMaterials.Add(dirtOutside);
 				}
@@ -489,24 +501,13 @@ namespace MSCDirtMod
 
 		private void SetupBuckets()
 		{
-			var bucket = Instantiate(m_bundle.LoadAssetWithSubAssets<GameObject>("BucketPrefab")[0]);
-			bucket.transform.position = new Vector3(-7.4f, -0.59f, 12.3f);
-			bucket.transform.localRotation = Quaternion.Euler(0, -10f, 0);
-			bucket.transform.localScale = new Vector3(1, 1, 1);
-			var trigger = bucket.AddComponent<BucketTrigger>();
-			trigger.onTrigger += HandleBucketTrigger;
-			trigger.onHover += HandleBucketHover;
+			var bucket =
+				Instantiate(m_bundle.LoadAssetWithSubAssets<GameObject>("BucketPrefab")[0]).AddComponent<BucketBehaviour>();
+			bucket.Setup("home");
 
-			// setup bucket 2 here at teimo's
-			bucket = Instantiate(bucket);
-			//bucket.transform.position = new Vector3(-7.4f, 0.59f, 12.3f);
-			bucket.transform.position = new Vector3(-1560f, 2.9f, 1177.3f);
-			bucket.transform.localRotation = Quaternion.Euler(0, -10f, 0);
-			bucket.transform.localScale = new Vector3(1, 1, 1);
-			trigger = bucket.GetComponent<BucketTrigger>();
-			trigger.onTrigger += HandleBucketTrigger;
-			trigger.onHover += HandleBucketHover;
-			
+			bucket = Instantiate(m_bundle.LoadAssetWithSubAssets<GameObject>("BucketPrefab")[0]).AddComponent<BucketBehaviour>();
+			bucket.Setup("teimo");
+
 			// setup satsuma trigger
 			var go = new GameObject("CleaningTrigger");
 			go.transform.SetParent(m_satsuma.transform, false);
@@ -536,8 +537,9 @@ namespace MSCDirtMod
 			var sponge = Instantiate(m_spongePrefab);
 			sponge.transform.SetParent(m_rightFist.transform.FindChild("Pivot/hand/Armature/Bone/Bone_001/Bone_006").transform,
 				false);
-			
+
 			sponge.transform.localPosition = Vector3.zero;
+			sponge.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
 			sponge.transform.FindChild("Sponge").GetComponent<MeshRenderer>().sortingLayerID =
 				m_rightFist.transform.FindChild("Pivot/hand/hand_rigged").GetComponent<SkinnedMeshRenderer>().sortingLayerID;
 
@@ -549,12 +551,6 @@ namespace MSCDirtMod
 				m_leftFist.transform.localScale.y,
 				m_leftFist.transform.localScale.z);
 			m_leftFist.transform.localPosition += new Vector3(-0.1f, 0, 0f);
-		}
-
-		private void HandleBucketHover(bool spongeAvailable)
-		{
-			var str = spongeAvailable ? "Take sponge" : "Drop sponge";
-			GameObject.Find("GUI/Indicators/Interaction").GetComponent<TextMesh>().text = str;
 		}
 
 		private void PlayTakeSponge()
@@ -569,11 +565,11 @@ namespace MSCDirtMod
 			m_spongeOffAudioSource.Play();
 		}
 
-		private void HandleBucketTrigger(BucketTrigger trigger, bool takeSponge)
+		public void BucketUse(BucketBehaviour trigger, bool hasSponge)
 		{
 			try
 			{
-				if (takeSponge)
+				if (hasSponge)
 				{
 					if (!m_handRight.Value)
 					{
@@ -600,7 +596,8 @@ namespace MSCDirtMod
 						m_leftFist.SetActive(false);
 						trigger.SetSponge(true);
 						PlayDropSponge();
-					} else 
+					}
+					else
 					{
 						m_handRight.Value = false;
 						m_rightFist.SetActive(false);
@@ -625,12 +622,24 @@ namespace MSCDirtMod
 			var str = "";
 			switch (i)
 			{
-				case 0: str = "God help me! Double goat!"; break;
-				case 1: str = "No, perkele, two pieces!"; break;
-				case 2: str = "Yup, gets moving!"; break;
-				case 3: str = "Perkele, now the dirt will go!"; break;
-				case 4: str = "Yes! Doubles!"; break;
-				case 5: str = "With two hands! God help me!"; break;
+				case 0:
+					str = "God help me! Double goat!";
+					break;
+				case 1:
+					str = "No, perkele, two pieces!";
+					break;
+				case 2:
+					str = "Yup, gets moving!";
+					break;
+				case 3:
+					str = "Perkele, now the dirt will go!";
+					break;
+				case 4:
+					str = "Yes! Doubles!";
+					break;
+				case 5:
+					str = "With two hands! God help me!";
+					break;
 			}
 
 			var tm = GameObject.Find("GUI/Indicators/Subtitles").GetComponent<TextMesh>();
@@ -660,7 +669,7 @@ namespace MSCDirtMod
 			{
 				m_wiperOnAmount -= Time.deltaTime * 0.2f * m_rainAmount;
 			}
-			
+
 			// clean car when it rains
 			if (m_rainAudioSource.isPlaying)
 			{
@@ -673,7 +682,7 @@ namespace MSCDirtMod
 			{
 				m_rainAmount -= Time.deltaTime * 0.1f;
 			}
-			
+
 			// dirty car when it moves, based on surface
 			var wheel = m_satsuma.GetComponentInChildren<Wheel>();
 			if (wheel != null)
@@ -684,33 +693,33 @@ namespace MSCDirtMod
 
 				switch (wheel.surfaceType)
 				{
-					case CarDynamics.SurfaceType.sand: 
+					case CarDynamics.SurfaceType.sand:
 						amount = 0.0002f;
 						minDirt = 0.4f;
 						minWheelDirt = 0.6f;
-					break;
-					case CarDynamics.SurfaceType.grass: 
+						break;
+					case CarDynamics.SurfaceType.grass:
 						amount = 0.0006f;
 						minDirt = 0;
 						minWheelDirt = 0;
-					break;
-					case CarDynamics.SurfaceType.offroad: 
+						break;
+					case CarDynamics.SurfaceType.offroad:
 						amount = 0.0002f;
 						minDirt = 0.4f;
 						minWheelDirt = 0.6f;
-					break;
+						break;
 					case CarDynamics.SurfaceType.track:
 						amount = 0.0001f;
 						minDirt = 0.8f;
 						minWheelDirt = 0.8f;
-					break;
+						break;
 					case CarDynamics.SurfaceType.oil:
 						amount = 0.0001f;
 						minDirt = 0.1f;
 						minWheelDirt = 0f;
-					break;
+						break;
 				}
-				
+
 				amount *= m_bodyDirtCutoff + 0.1f; // diminishing returns to dirt (accumulate at 110% at no dirt, 10% at full dirt)
 				var v = Time.deltaTime * m_carDynamics.velo * amount;
 
@@ -787,6 +796,11 @@ namespace MSCDirtMod
 			newMat.SetTexture("_WiperHole", m_windowDirtWiperHoleTexture);
 			newMat.SetInt("_Offset", offset);
 			return newMat;
+		}
+
+		public string SaveFilePath
+		{
+			get { return Path.Combine(Application.persistentDataPath, "dirt_dirt.xml"); }
 		}
 	}
 }
