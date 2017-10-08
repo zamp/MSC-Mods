@@ -3,16 +3,19 @@ using UnityEngine;
 
 namespace MSCPaintMagazine
 {
-	public class MSCPaintMagazine : Mod
+	public class PaintMagazine : Mod
 	{
 		private bool m_isLoaded = false;
-		public override string ID { get { return "MSC_CustomPaint"; } }
-		public override string Name { get { return "Custom Paint"; } }
+		public override string ID { get { return "PaintMagazine"; } }
+		public override string Name { get { return "PaintMagazine"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1"; } }
-		
+		public override string Version { get { return "0.1.1"; } }
+		public override bool UseAssetsFolder { get { return true; } }
+		public static string assetPath;
+
 		public override void OnLoad()
 		{
+			assetPath = ModLoader.GetModAssetsFolder(this);
 		}
 
 		public override void Update()

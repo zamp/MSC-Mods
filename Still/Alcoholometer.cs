@@ -130,13 +130,6 @@ namespace MSCStill
 
 		private void Load()
 		{
-			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "alcometer.xml");
-			if (File.Exists(oldPath))
-			{
-				// migrate file
-				File.Move(oldPath, SaveFilePath);
-			}
-
 			if (File.Exists(SaveFilePath))
 			{
 				var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);

@@ -15,7 +15,8 @@ namespace SportsBag
 		public override string ID { get { return "SportsBag"; } }
 		public override string Name { get { return "SportsBag"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.3"; } }
+		public override string Version { get { return "0.3.1"; } }
+		public override bool UseAssetsFolder{ get { return true; } }
 
 		public override void Update()
 		{
@@ -24,7 +25,7 @@ namespace SportsBag
 				if (!m_isLoaded)
 				{
 					// load bundle
-					var path = Path.Combine(ModLoader.ModsFolder, "SportsBag");
+					var path = ModLoader.GetModAssetsFolder(this);
 					if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 						path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 					else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -42,6 +43,7 @@ namespace SportsBag
 					{
 						m_bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(path));
 						GameObject.Instantiate(m_bundle.LoadAsset<GameObject>("SportsBagPrefab")).AddComponent<SportsBagBehaviour>();
+						m_bundle.Unload(false);
 					}
 
 					m_isLoaded = true;
@@ -49,7 +51,6 @@ namespace SportsBag
 			}
 			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
 			{
-				m_bundle.Unload(true);
 				m_isLoaded = false;
 			}
 		}

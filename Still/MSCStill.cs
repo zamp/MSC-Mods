@@ -9,10 +9,13 @@ namespace MSCStill
 		public override string ID { get { return "MSCStill"; } }
 		public override string Name { get { return "Still"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "1.0.10"; } }
+		public override string Version { get { return "1.1"; } }
+		public override bool UseAssetsFolder { get { return true; } }
+		public static string assetPath;
 
 		public override void OnLoad()
 		{
+			assetPath = ModLoader.GetModAssetsFolder(this);
 		}
 
 		public override void Update()

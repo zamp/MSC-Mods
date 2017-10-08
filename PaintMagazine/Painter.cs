@@ -47,7 +47,7 @@ namespace MSCPaintMagazine
 				}
 			}
 
-			var path = Path.Combine(ModLoader.ModsFolder, "MSCPaintMagazine");
+			var path = PaintMagazine.assetPath;
 			if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 				path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 			else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -87,11 +87,12 @@ namespace MSCPaintMagazine
 				ModConsole.Print("Loaded " + m_paintJobs.Count + " paintjobs!");
 				ModConsole.Print("Custom Paint Setup!");
 
-				path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCPaintMagazine"), "lastpainturl.txt");
+				path = Path.Combine(Application.persistentDataPath, "lastpainturl.txt");
 				if (File.Exists(path))
 				{
 					LoadImageAndSetSatsuma(File.ReadAllText(path));
 				}
+				m_bundle.Unload(false);
 			}
 		}
 
@@ -169,7 +170,7 @@ namespace MSCPaintMagazine
 
 		private IEnumerator SetSatsumaImage(string url)
 		{
-			File.WriteAllText(Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCPaintMagazine"), "lastpainturl.txt"), url);
+			File.WriteAllText(Path.Combine(Application.persistentDataPath, "lastpainturl.txt"), url);
 			
 			var www = new WWW(url);
 			yield return www;

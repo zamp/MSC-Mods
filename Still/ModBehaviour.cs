@@ -9,7 +9,6 @@ namespace MSCStill
 {
 	public class ModBehaviour : MonoBehaviour
 	{
-		private static string ModPath;
 		private AssetBundle m_bundle;
 		private GameObject m_stillPrefab;
 		private GameObject m_bottlePrefab;
@@ -39,7 +38,6 @@ namespace MSCStill
 			Instance = this;
 			try
 			{
-				ModPath = Path.Combine(ModLoader.ModsFolder, "MSCStill");
 				SetupMod();
 			}
 			catch (Exception e)
@@ -57,15 +55,15 @@ namespace MSCStill
 		private void SetupMod()
 		{
 			ModConsole.Print("Still mod loading assetbundle...");
-			var path = "";
+			var path = MSCStill.assetPath;
 			if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
-				path = Path.Combine(ModPath, "bundle-linux"); // apparently fixes opengl
+				path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 			else if (Application.platform == RuntimePlatform.WindowsPlayer)
-				path = Path.Combine(ModPath, "bundle-windows");
+				path = Path.Combine(path, "bundle-windows");
 			else if (Application.platform == RuntimePlatform.OSXPlayer)
-				path = Path.Combine(ModPath, "bundle-osx");
+				path = Path.Combine(path, "bundle-osx");
 			else if (Application.platform == RuntimePlatform.LinuxPlayer)
-				path = Path.Combine(ModPath, "bundle-linux");
+				path = Path.Combine(path, "bundle-linux");
 
 			if (!File.Exists(path))
 			{
@@ -77,6 +75,7 @@ namespace MSCStill
 				LoadAssets();
 				SetupGameObjects();
 				SetupBottle();
+				m_bundle.Unload(false);
 				ModConsole.Print("Still mod Setup!");
 			}
 		}

@@ -9,13 +9,17 @@ namespace MSCDirtMod
 		public override string ID { get { return "MSCDirtMod"; } }
 		public override string Name { get { return "Dirt Mod"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "1.8.6"; } }
+		public override string Version { get { return "1.8.7"; } }
+		public override bool UseAssetsFolder { get { return true; } }
+
+		public static string assetPath;
 
 		public static Keybind keyMoreDirt = new Keybind("moredirt", "More Dirt", KeyCode.KeypadPlus, KeyCode.LeftControl);
 		public static Keybind keyLessDirt = new Keybind("lessdirt", "Less Dirt", KeyCode.KeypadMinus, KeyCode.LeftControl);
 
 		public override void OnLoad()
 		{
+			assetPath = ModLoader.GetModAssetsFolder(this);
 			Keybind.Add(this, keyMoreDirt);
 			Keybind.Add(this, keyLessDirt);
 		}

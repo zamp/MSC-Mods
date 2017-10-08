@@ -11,7 +11,8 @@ namespace WoodCarrier
 		public override string ID { get { return "WoodCarrier"; } }
 		public override string Name { get { return "Wood Carrier"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1"; } }
+		public override string Version { get { return "0.1.1"; } }
+		public override bool UseAssetsFolder { get { return true; }}
 
 		//Called when mod is loading
 		public override void OnLoad()
@@ -28,7 +29,7 @@ namespace WoodCarrier
 					if (GameObject.Find("PLAYER") == null)
 						return;
 
-					var path = Path.Combine(ModLoader.ModsFolder, "WoodCarrier");
+					var path = ModLoader.GetModAssetsFolder(this);
 					if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 						path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 					else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -50,12 +51,12 @@ namespace WoodCarrier
 					GameObject.Instantiate(asset).AddComponent<WoodCarrierBehaviour>().id = "home";
 					GameObject.Instantiate(asset).AddComponent<WoodCarrierBehaviour>().id = "cottage";
 
+					m_bundle.Unload(false);
 					m_isLoaded = true;
 				}
 			}
 			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
 			{
-				m_bundle.Unload(true);
 				m_isLoaded = false;
 			}
 		}

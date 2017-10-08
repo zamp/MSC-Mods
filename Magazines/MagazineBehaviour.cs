@@ -11,18 +11,27 @@ namespace Magazines
 		public class Magazine
 		{
 			public string name;
-			public bool isBought, isPorn;
-			public float price, posX, posY, posZ, rotX, rotY, rotZ;
+			public bool isPorn;
+			public float price;
+		}
+
+		public class Data
+		{
+			public bool isBought = false;
+			public float posX, posY, posZ, rotX, rotY, rotZ;
 		}
 
 		private Magazine m_data;
-		private string m_file;
+		private string m_baseFile;
 		private Rigidbody m_rigidbody;
 		private HutongGames.PlayMaker.FsmBool m_guiUseBool;
 		private HutongGames.PlayMaker.FsmString m_guiInteractString;
 		private string[] m_files;
 		private bool m_isBeingBought;
 		private HutongGames.PlayMaker.FsmBool m_guiBuyBool;
+
+		private Data m_saveData;
+		private string m_magazineDirectory;
 
 		void Update()
 		{
@@ -36,14 +45,17 @@ namespace Magazines
 			}
 		}
 
-		internal void Setup(string file)
+		internal void Setup(string path)
 		{
 			try
 			{
+				m_magazineDirectory = new FileInfo(path).Directory.Name;
+				Load();
+				
 				GameHook.InjectStateHook(GameObject.Find("STORE/StoreCashRegister/Register"), "Purchase", OnBuyHook);
 
-				m_file = file;
-				m_data = SaveUtil.DeserializeReadFile<Magazine>(m_file);
+				m_baseFile = path;
+				m_data = SaveUtil.DeserializeReadFile<Magazine>(m_baseFile);
 				GameHook.InjectStateHook(GameObject.Find("ITEMS"), "Save game", Save);
 
 				ModConsole.Print("Setting up " + m_data.name);
@@ -55,8 +67,8 @@ namespace Magazines
 				if (IsBought)
 				{
 					MakeInteractable();
-					transform.position = new Vector3(m_data.posX, m_data.posY, m_data.posZ);
-					transform.rotation = Quaternion.Euler(m_data.rotX, m_data.rotY, m_data.rotZ);
+					transform.position = new Vector3(m_saveData.posX, m_saveData.posY, m_saveData.posZ);
+					transform.rotation = Quaternion.Euler(m_saveData.rotX, m_saveData.rotY, m_saveData.rotZ);
 				}
 				else
 				{
@@ -64,14 +76,14 @@ namespace Magazines
 					Magazines.Instance.Rack.AddMagazineForSale(this);
 				}
 
-				m_files = Directory.GetFiles(Path.Combine(Path.GetDirectoryName(file), "Pages"));
+				m_files = Directory.GetFiles(Path.Combine(Path.GetDirectoryName(path), "Pages"));
 				m_files = m_files.ToList().OrderBy(f => int.Parse(Path.GetFileNameWithoutExtension(f))).ToArray();
 
 				StartCoroutine(Magazines.LoadImage(m_files[0], SetCover));
 			}
 			catch (Exception e)
 			{
-				ModConsole.Print(e);
+				ModConsole.Error(e.ToString());
 			}
 		}
 
@@ -129,7 +141,7 @@ namespace Magazines
 		private void OnPaid()
 		{
 			gameObject.SetActive(true);
-			m_data.isBought = true;
+			m_saveData.isBought = true;
 
 			transform.position = new Vector3(-1551.1f, 4.8f, 1182.8f);
 			transform.rotation = Quaternion.Euler(0, 330, 270);
@@ -139,6 +151,7 @@ namespace Magazines
 
 		private void MakeInteractable()
 		{
+			gameObject.SetActive(true);
 			transform.SetParent(null, true);
 			gameObject.name = m_data.name + "(Clone)";
 			gameObject.layer = LayerMask.NameToLayer("Parts");
@@ -147,15 +160,27 @@ namespace Magazines
 			m_rigidbody.isKinematic = false;
 		}
 
+		private void Load()
+		{
+			if (File.Exists(SaveFilePath))
+			{
+				m_saveData = SaveUtil.DeserializeReadFile<Data>(SaveFilePath);
+			}
+			else
+			{
+				m_saveData = new Data();
+			}
+		}
+
 		private void Save()
 		{
-			m_data.posX = transform.position.x;
-			m_data.posY = transform.position.y;
-			m_data.posZ = transform.position.z;
-			m_data.rotX = transform.rotation.eulerAngles.x;
-			m_data.rotY = transform.rotation.eulerAngles.y;
-			m_data.rotZ = transform.rotation.eulerAngles.z;
-			SaveUtil.SerializeWriteFile(m_data, m_file);
+			m_saveData.posX = transform.position.x;
+			m_saveData.posY = transform.position.y;
+			m_saveData.posZ = transform.position.z;
+			m_saveData.rotX = transform.rotation.eulerAngles.x;
+			m_saveData.rotY = transform.rotation.eulerAngles.y;
+			m_saveData.rotZ = transform.rotation.eulerAngles.z;
+			SaveUtil.SerializeWriteFile(m_saveData, SaveFilePath);
 		}
 
 		public void Read()
@@ -175,12 +200,17 @@ namespace Magazines
 
 		public bool IsBought
 		{
-			get { return m_data.isBought; }
+			get { return m_saveData.isBought; }
 		}
 
 		public float Price
 		{
 			get { return m_data.price; }
+		}
+
+		public string SaveFilePath
+		{
+			get { return Path.Combine(Application.persistentDataPath, "magazine_" + m_magazineDirectory + ".xml"); }
 		}
 	}
 }

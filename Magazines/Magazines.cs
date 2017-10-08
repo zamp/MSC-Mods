@@ -8,10 +8,12 @@ namespace Magazines
 {
 	public class Magazines : Mod
 	{
-		public override string ID { get { return "MiscStuff"; } }
-		public override string Name { get { return "Misc Stuff"; } }
+		public override string ID { get { return "Magazines"; } }
+		public override string Name { get { return "Magazines"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.2"; } }
+		public override string Version { get { return "0.2.1"; } }
+		public override bool UseAssetsFolder { get { return true; } }
+		public static string assetPath;
 
 		private bool m_isLoaded = false;
 		private AssetBundle m_bundle;
@@ -21,7 +23,7 @@ namespace Magazines
 
 		public override void OnLoad()
 		{
-			
+			assetPath = ModLoader.GetModAssetsFolder(this);
 		}
 
 		public override void Update()
@@ -43,15 +45,14 @@ namespace Magazines
 			}
 			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
 			{
-				m_bundle.Unload(true);
 				m_isLoaded = false;
 			}
 		}
 
 		private void SetupMod()
 		{
-			ModConsole.Print("Misc mod loading assetbundle...");
-			var path = Path.Combine(ModLoader.ModsFolder, "Magazines");
+			ModConsole.Print("Magazines mod loading assetbundle...");
+			var path = ModLoader.GetModAssetsFolder(this);
 			if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 				path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 			else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -75,6 +76,8 @@ namespace Magazines
 
 				var obj = GameObject.Instantiate(m_bundle.LoadAsset<GameObject>("MagazineRackPrefab"));
 				m_rack = obj.AddComponent<RackBehaviour>();
+
+				m_bundle.Unload(false);
 			}
 		}
 

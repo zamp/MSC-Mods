@@ -78,15 +78,14 @@ namespace SportsBag
 				rotY = transform.rotation.eulerAngles.y,
 				rotZ = transform.rotation.eulerAngles.z
 			};
-			SaveUtil.SerializeWriteFile(data, Path.Combine(ModLoader.ModsFolder, Path.Combine("SportsBag", "bag.xml")));
+			SaveUtil.SerializeWriteFile(data, SaveFilePath);
 		}
 
 		private void Load()
 		{
-			var path = Path.Combine(ModLoader.ModsFolder, Path.Combine("SportsBag", "bag.xml"));
-			if (File.Exists(path))
+			if (File.Exists(SaveFilePath))
 			{
-				var data = SaveUtil.DeserializeReadFile<SaveData>(path);
+				var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);
 				transform.position = new Vector3(data.posX, data.posY, data.posZ);
 				transform.rotation = Quaternion.Euler(data.rotX, data.rotY, data.rotZ);
 			}
@@ -155,5 +154,7 @@ namespace SportsBag
 			m_openAmount = Mathf.Clamp(m_openAmount + Time.deltaTime * (m_isOpen ? 500f : -500f), 0, 100f);
 			m_meshRenderer.SetBlendShapeWeight(0, m_openAmount);
 		}
+
+		public string SaveFilePath { get { return Path.Combine(Application.persistentDataPath, "sportsbag.xml"); } }
 	}
 }

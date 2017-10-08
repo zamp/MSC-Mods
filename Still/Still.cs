@@ -220,13 +220,6 @@ namespace MSCStill
 
 		private void Load()
 		{
-			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "still.xml");
-			if (File.Exists(oldPath))
-			{
-				// migrate save
-				File.Move(oldPath, SaveFilePath);
-			}
-
 			if (!File.Exists(SaveFilePath))
 				return;
 

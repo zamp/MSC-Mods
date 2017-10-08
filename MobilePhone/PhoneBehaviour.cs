@@ -185,19 +185,22 @@ namespace MobilePhone
 				rotZ = transform.rotation.eulerAngles.z,
 			};
 
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MobilePhone"), "phone.xml");
-			SaveUtil.SerializeWriteFile(data, path);
+			SaveUtil.SerializeWriteFile(data, SaveFilePath);
 		}
 
 		private void Load()
 		{
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MobilePhone"), "phone.xml");
-			if (!File.Exists(path))
+			if (!File.Exists(SaveFilePath))
 				return;
 
-			var data = SaveUtil.DeserializeReadFile<SaveData>(path);
+			var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);
 			transform.position = new Vector3(data.posX, data.posY, data.posZ);
 			transform.rotation = Quaternion.Euler(data.rotX, data.rotY, data.rotZ);
+		}
+
+		public string SaveFilePath
+		{
+			get { return Path.Combine(Application.persistentDataPath, "mobilephone.xml"); }
 		}
 	}
 }

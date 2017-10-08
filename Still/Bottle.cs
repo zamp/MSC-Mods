@@ -158,13 +158,6 @@ namespace MSCStill
 
 		private void Load()
 		{
-			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCStill"), "bottle.xml");
-			if (File.Exists(oldPath))
-			{
-				// migrate file
-				File.Move(oldPath, SaveFilePath);
-			}
-
 			if (!File.Exists(SaveFilePath))
 				return;
 

@@ -13,7 +13,8 @@ namespace Dynamite
 		public override string ID { get { return "Dynamite"; } }
 		public override string Name { get { return "Dynamite"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.2"; } }
+		public override string Version { get { return "0.2.2"; } }
+		public override bool UseAssetsFolder { get { return true; } }
 
 		public override void Update()
 		{
@@ -27,7 +28,7 @@ namespace Dynamite
 							return;
 
 						// load bundle
-						var path = Path.Combine(ModLoader.ModsFolder, "Dynamite");
+						var path = ModLoader.GetModAssetsFolder(this);
 						if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 							path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 						else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -46,6 +47,7 @@ namespace Dynamite
 							m_bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(path));
 							GameObject.Instantiate(m_bundle.LoadAsset<GameObject>("ExplosivesPrefab"))
 								.AddComponent<BoxBehaviour>();
+							m_bundle.Unload(false);
 						}
 
 						m_isLoaded = true;
@@ -59,7 +61,6 @@ namespace Dynamite
 			}
 			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
 			{
-				m_bundle.Unload(true);
 				m_isLoaded = false;
 			}
 		}

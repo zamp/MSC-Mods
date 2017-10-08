@@ -21,7 +21,8 @@ namespace RadioSubtitles
 		public override string ID { get { return "RadioSubtitles"; } }
 		public override string Name { get { return "RadioSubtitles"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1"; } }
+		public override string Version { get { return "0.1.6"; } }
+		public override bool UseAssetsFolder { get { return true; }}
 
 		private class ChangeRadioClip : ConsoleCommand
 		{
@@ -59,7 +60,7 @@ namespace RadioSubtitles
 				{
 					if (!m_isLoaded)
 					{
-						var path = Path.Combine(ModLoader.ModsFolder, "RadioSubtitles/missing.txt");
+						var path = Path.Combine(ModLoader.GetModAssetsFolder(this), "missing.txt");
 						m_missing = new List<string>();
 						if (File.Exists(path))
 							m_missing = File.ReadAllLines(path).ToList();
@@ -131,7 +132,7 @@ namespace RadioSubtitles
 			var clip = source.clip.name;
 			if (m_subtitlesFileOpen != clip)
 			{
-				var path = Path.Combine(ModLoader.ModsFolder, "RadioSubtitles/" + clip + ".encore.txt");
+				var path = Path.Combine(ModLoader.GetModAssetsFolder(this), clip + ".encore.txt");
 				if (File.Exists(path))
 				{
 					m_subtitlesFileOpen = clip;
@@ -157,7 +158,7 @@ namespace RadioSubtitles
 					if (!m_missing.Contains(clip) && source == m_radioChannel1Source)
 					{
 						m_missing.Add(clip);
-						File.WriteAllLines(Path.Combine(ModLoader.ModsFolder, "RadioSubtitles/missing.txt"), m_missing.ToArray());
+						File.WriteAllLines(Path.Combine(ModLoader.GetModAssetsFolder(this), "missing.txt"), m_missing.ToArray());
 					}
 				}
 			}

@@ -98,11 +98,6 @@ namespace MSCDirtMod
 
 		private void Load()
 		{
-			var oldPath = Path.Combine(Path.Combine(ModLoader.ModsFolder, "MSCDirtMod"), "dirt.xml");
-			if (File.Exists(oldPath))
-			{
-				File.Move(oldPath, SaveFilePath);
-			}
 			if (File.Exists(SaveFilePath))
 			{
 				var data = SaveUtil.DeserializeReadFile<SaveData>(SaveFilePath);
@@ -122,7 +117,7 @@ namespace MSCDirtMod
 			}
 
 			ModConsole.Print("Dirt mod loading assetbundle...");
-			var path = Path.Combine(ModLoader.ModsFolder, "MSCDirtMod");
+			var path = MSCDirtMod.assetPath;
 			if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 				path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 			else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -396,7 +391,7 @@ namespace MSCDirtMod
 					m_bodyParts.Add(bodypart, part);
 				m_bodyParts[bodypart] = part;
 
-				ModConsole.Print("Swapped body " + bodypart);
+				//ModConsole.Print("Swapped body " + bodypart);
 				var mr = part.GetComponent<MeshRenderer>();
 				mr.shadowCastingMode = ShadowCastingMode.On;
 				mr.material = SwapOpaqueShader(mr.material, m_bodyDirtTexture);
@@ -441,7 +436,7 @@ namespace MSCDirtMod
 
 			var texture = m_rimsDirtTexture;
 
-			ModConsole.Print("Swapped rim " + rim);
+			//ModConsole.Print("Swapped rim " + rim);
 			var mr = part.GetComponent<MeshRenderer>();
 			// use the body shader for wheels too
 			mr.material = SwapOpaqueShader(mr.material, texture);
@@ -467,7 +462,7 @@ namespace MSCDirtMod
 			else if (tire.Contains("Rally"))
 				texture = m_tireDirtTextureRally;
 
-			ModConsole.Print("Swapped tire " + tire);
+			//ModConsole.Print("Swapped tire " + tire);
 			var mr = part.GetComponent<MeshRenderer>();
 			// use the body shader for wheels too
 			mr.material = SwapOpaqueShader(mr.material, texture);

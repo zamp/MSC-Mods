@@ -9,7 +9,7 @@ public class CreateAssetBundles
 	[MenuItem ("Assets/Build AssetBundles")]
 	static void BuildAllAssetBundles ()
 	{
-		const string outDir = "E:/Steam/steamapps/common/My Summer Car/Mods/MiscStuff/";
+		const string outDir = "E:/Steam/steamapps/common/My Summer Car/Mods/Assets/Magazines/";
 		const string tempDir = "Assets/AssetBundles/";
 
 		Directory.CreateDirectory(tempDir);

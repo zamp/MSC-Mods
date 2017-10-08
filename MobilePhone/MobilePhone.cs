@@ -8,10 +8,11 @@ namespace MobilePhone
 	{
 		private bool m_isLoaded = false;
 		private AssetBundle m_bundle;
-		public override string ID { get { return "MSCMobilePhone"; } }
-		public override string Name { get { return "Mobile Phone"; } }
+		public override string ID { get { return "MobilePhone"; } }
+		public override string Name { get { return "MobilePhone"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.2.4"; } }
+		public override string Version { get { return "0.2.5"; } }
+		public override bool UseAssetsFolder { get { return true; }}
 
 		public override void OnLoad()
 		{
@@ -35,7 +36,6 @@ namespace MobilePhone
 			}
 			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
 			{
-				m_bundle.Unload(true);
 				m_isLoaded = false;
 			}
 		}
@@ -43,7 +43,7 @@ namespace MobilePhone
 		private void SetupMod()
 		{
 			ModConsole.Print("Mobile Phone mod loading assetbundle...");
-			var path = Path.Combine(ModLoader.ModsFolder, "MobilePhone");
+			var path = ModLoader.GetModAssetsFolder(this);
 			if (SystemInfo.graphicsDeviceVersion.StartsWith("OpenGL") && Application.platform == RuntimePlatform.WindowsPlayer)
 				path = Path.Combine(path, "bundle-linux"); // apparently fixes opengl
 			else if (Application.platform == RuntimePlatform.WindowsPlayer)
@@ -73,6 +73,8 @@ namespace MobilePhone
 
 				var phone = GameObject.Instantiate(prefab);
 				phone.AddComponent<PhoneBehaviour>().headPhone = headPhone;
+
+				m_bundle.Unload(false);
 
 				ModConsole.Print("Mobile Phone mod Setup!");
 			}

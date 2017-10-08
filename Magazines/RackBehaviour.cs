@@ -29,7 +29,7 @@ namespace Magazines
 			m_topSlots.Add(transform.FindChild("TopSlot3"));
 			m_topSlots.Add(transform.FindChild("TopSlot4"));
 
-			var path = Path.Combine(Path.Combine(ModLoader.ModsFolder, "Magazines"), "Magazines");
+			var path = Path.Combine(Magazines.assetPath, "Magazines");
 			foreach (var file in Directory.GetFiles(path, "*.xml", SearchOption.AllDirectories))
 			{
 				var magazine = Instantiate(m_magazinePrefab);
