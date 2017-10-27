@@ -17,6 +17,7 @@ namespace Dynamite
 		private bool m_isExploded = false;
 		private bool m_shouldExplode = false;
 		private float m_timer;
+		private float m_fuseTimer;
 
 		private void Start()
 		{
@@ -34,6 +35,15 @@ namespace Dynamite
 				if (m_isLit)
 				{
 					m_timer -= Time.deltaTime;
+					m_fuseTimer -= Time.deltaTime;
+
+					if (m_fuseTimer < 0)
+					{
+						GetComponent<Animator>().StopPlayback();
+						GetComponent<AudioSource>().Stop();
+						transform.FindChild("FuseParticles").GetComponent<ParticleSystem>().Stop();
+					}
+
 					if (m_shouldExplode && m_timer < 0)
 					{
 						ExplodeNow();
@@ -74,6 +84,7 @@ namespace Dynamite
 			m_isLit = true;
 			m_shouldExplode = true;
 			m_timer = delay;
+			m_fuseTimer = 10f;
 		}
 
 		private void ExplodeNow()
@@ -159,8 +170,11 @@ namespace Dynamite
 
 					if (collider.attachedRigidbody != null && !rigidbodies.Contains(collider.attachedRigidbody))
 					{
+						// turn kinematic objects to nonkinematic so they fly around
+						collider.attachedRigidbody.isKinematic = false;
+						collider.attachedRigidbody.useGravity = true;
 						rigidbodies.Add(collider.attachedRigidbody);
-						collider.attachedRigidbody.AddExplosionForce(400f, transform.position, 15f, 0, ForceMode.Impulse);
+						collider.attachedRigidbody.AddExplosionForce(2500f, transform.position, 15f, 0, ForceMode.Impulse);
 
 						var crashEvent = collider.attachedRigidbody.transform.FindChild("CrashEvent");
 						if (crashEvent != null)
