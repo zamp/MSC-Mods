@@ -110,7 +110,6 @@ namespace MSCDirtMod
 		private IEnumerator SetupMod()
 		{
 			while (GameObject.Find("PLAYER") == null ||
-			       GameObject.Find("SATSUMA(557kg)") == null ||
 			       GameObject.Find("PLAYER/Pivot/Camera/FPSCamera/FPSCamera/AudioRain") == null)
 			{
 				yield return null;
@@ -139,7 +138,7 @@ namespace MSCDirtMod
 			ModConsole.Print("Dirt mod doing final setup...");
 			m_rainAudioSource = GameObject.Find("PLAYER/Pivot/Camera/FPSCamera/FPSCamera/AudioRain").GetComponent<AudioSource>();
 
-			m_satsuma = GameObject.Find("SATSUMA(557kg)");
+			m_satsuma = PlayMakerGlobals.Instance.Variables.GetFsmGameObject("TheCar").Value;
 			m_carDynamics = m_satsuma.GetComponentInChildren<CarDynamics>();
 			m_wiperPivot = m_satsuma.transform.FindChild("Wipers/WiperLeftPivot");
 
