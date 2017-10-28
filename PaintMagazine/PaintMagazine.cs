@@ -9,7 +9,7 @@ namespace MSCPaintMagazine
 		public override string ID { get { return "PaintMagazine"; } }
 		public override string Name { get { return "PaintMagazine"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1.1"; } }
+		public override string Version { get { return "0.1.2"; } }
 		public override bool UseAssetsFolder { get { return true; } }
 		public static string assetPath;
 

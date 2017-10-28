@@ -81,20 +81,13 @@ namespace WoodCarrier
 
 		private void Update()
 		{
-			try
+			m_rigidbody.mass = 2f + m_logs * 2f;
+			for (var i = 0; i < m_logObjects.Count; ++i)
 			{
-				m_rigidbody.mass = 2f + m_logs * 2f;
-				for (var i = 0; i < m_logObjects.Count; ++i)
-				{
-					m_logObjects[i].SetActive(m_logs > i);
-				}
+				m_logObjects[i].SetActive(m_logs > i);
+			}
 				
-				Interact();
-			}
-			catch (Exception e)
-			{
-				ModConsole.Error(e.ToString());
-			}
+			Interact();
 		}
 
 		private void Interact()

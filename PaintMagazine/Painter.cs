@@ -32,8 +32,7 @@ namespace MSCPaintMagazine
 
 		private IEnumerator SetupMod()
 		{
-			while (GameObject.Find("PLAYER") == null ||
-					GameObject.Find("SATSUMA(557kg)") == null)
+			while (GameObject.Find("PLAYER") == null)
 			{
 				yield return null;
 			}
@@ -175,7 +174,7 @@ namespace MSCPaintMagazine
 			var www = new WWW(url);
 			yield return www;
 			m_satsumaDecalTexture = www.texture;
-			m_satsuma = GameObject.Find("SATSUMA(557kg)");
+			m_satsuma = PlayMakerGlobals.Instance.Variables.FindFsmGameObject("TheCar").Value;
 
 			ChangeSatsumaDecalTexture("Body/car body(xxxxx)");
 			ChangeSatsumaDecalTexture("Body/pivot_hood/hood(Clone)");

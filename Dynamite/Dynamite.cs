@@ -13,7 +13,7 @@ namespace Dynamite
 		public override string ID { get { return "Dynamite"; } }
 		public override string Name { get { return "Dynamite"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.2.2"; } }
+		public override string Version { get { return "0.2.3"; } }
 		public override bool UseAssetsFolder { get { return true; } }
 
 		public override void Update()

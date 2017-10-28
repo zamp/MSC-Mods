@@ -9,7 +9,7 @@ namespace MSCDirtMod
 		public override string ID { get { return "MSCDirtMod"; } }
 		public override string Name { get { return "Dirt Mod"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "1.8.7"; } }
+		public override string Version { get { return "1.8.8"; } }
 		public override bool UseAssetsFolder { get { return true; } }
 
 		public static string assetPath;

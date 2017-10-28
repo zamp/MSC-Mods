@@ -11,7 +11,7 @@ namespace WoodCarrier
 		public override string ID { get { return "WoodCarrier"; } }
 		public override string Name { get { return "Wood Carrier"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.1.1"; } }
+		public override string Version { get { return "0.1.2"; } }
 		public override bool UseAssetsFolder { get { return true; }}
 
 		//Called when mod is loading
