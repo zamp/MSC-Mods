@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CEAE666-CBA5-4FA6-AEE3-D6C5CFB2DE20}</ProjectGuid>
+    <ProjectGuid>{279D880C-BCD2-40BA-8375-38A5CEE6A0B0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SubtitleOutline</RootNamespace>
@@ -50,6 +50,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MSCSubtitleOutline\bin\Release\SubtitleOutline.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(MSCMODS)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

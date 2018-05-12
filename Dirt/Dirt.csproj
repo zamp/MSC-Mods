@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CEAE666-CBA5-4FA6-AEE3-D6C5CFB2DE20}</ProjectGuid>
+    <ProjectGuid>{19BB27D9-029B-4794-A341-2F217FE60041}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MSCDirtMod</RootNamespace>
@@ -65,6 +65,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MSC Mods\Dirt\bin\Release\MSCDirtMod.dll" "E:\Steam\steamapps\common\My Summer Car\Mods" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(MSCMODS)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

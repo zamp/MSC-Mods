@@ -60,7 +60,7 @@ namespace MobilePhone
 				gameObject.layer = LayerMask.NameToLayer("Parts");
 				gameObject.tag = "PART";
 
-				var fsm = GameObject.Find("YARD/Building/Dynamics/Telephone/Logic")
+				var fsm = GameObject.Find("YARD/Building/LIVINGROOM/Telephone/Logic")
 					.transform.FindChild("Ring").GetComponent<PlayMakerFSM>();
 				m_answeredBool = fsm.FsmVariables.FindFsmBool("Answer");
 				m_topic = fsm.FsmVariables.FindFsmString("Topic");

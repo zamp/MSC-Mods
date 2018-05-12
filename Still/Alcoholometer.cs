@@ -27,7 +27,6 @@ namespace MSCStill
 		private FsmBool m_guiBuyBool;
 		private FsmString m_guiInteractString;
 		private bool m_isBeingBought;
-		private bool m_isInUse;
 
 		void Start()
 		{

@@ -89,13 +89,6 @@ namespace _386Games
 			}
 		}
 
-		private void DumpGameObject(GameObject target)
-		{
-			var lines = "";
-			Recursive(ref lines, 0, target.transform);
-			File.WriteAllText(ModLoader.ModsFolder + "/dump full.txt", lines);
-		}
-
 		private void Recursive(ref string lines, int tabs, Transform transform)
 		{
 			var tabsStr = "";

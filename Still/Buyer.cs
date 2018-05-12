@@ -15,7 +15,7 @@ namespace MSCStill
 			public override void OnEnter()
 			{
 				// this action will force the phone to hang in the "choose playback" state
-				var fsm = GameObject.Find("YARD/Building/Dynamics/Telephone/Logic")
+				var fsm = GameObject.Find("YARD/Building/LIVINGROOM/Telephone/Logic")
 					   .transform.FindChild("Ring").GetComponent<PlayMakerFSM>();
 				if (fsm.FsmVariables.FindFsmString("Topic").Value != "CUSTOM")
 					Finish();
@@ -69,7 +69,7 @@ namespace MSCStill
 			m_guiUse = PlayMakerGlobals.Instance.Variables.FindFsmBool("GUIuse");
 
 			// inject our phone hook
-			m_ringFsm = GameObject.Find("YARD/Building/Dynamics/Telephone/Logic")
+			m_ringFsm = GameObject.Find("YARD/Building/LIVINGROOM/Telephone/Logic")
 					.transform.FindChild("Ring").GetComponent<PlayMakerFSM>();
 			m_answeredBool = m_ringFsm.FsmVariables.FindFsmBool("Answer");
 			m_topic = m_ringFsm.FsmVariables.FindFsmString("Topic");

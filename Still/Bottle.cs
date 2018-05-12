@@ -25,6 +25,10 @@ namespace MSCStill
 
 		void Awake()
 		{
+			// fix NaN thirst
+			if (float.IsNaN(PlayMakerGlobals.Instance.Variables.FindFsmFloat("PlayerThirst").Value))
+				PlayMakerGlobals.Instance.Variables.FindFsmFloat("PlayerThirst").Value = 0;
+
 			m_liquid = transform.FindChild("Liquid");
 			// these two things make this object carriable (probably)
 			gameObject.name = "Pontikka Bottle(Clone)";
@@ -111,6 +115,13 @@ namespace MSCStill
 			var drinkEthanol = ethanol / total * 0.5f;
 			var drinkMethanol = methanol / total * 0.5f;
 			var drinkWater = water / total * 0.5f;
+
+			if (total <= 0)
+			{
+				drinkEthanol = 0;
+				drinkMethanol = 0;
+				drinkWater = 0;
+			}
 
 			water -= drinkWater;
 			methanol -= drinkMethanol;

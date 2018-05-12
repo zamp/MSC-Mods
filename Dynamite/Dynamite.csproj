@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CEAE666-CBA5-4FA6-AEE3-D6C5CFB2DE20}</ProjectGuid>
+    <ProjectGuid>{3953F883-56E2-466A-86D9-6BCC56E2815B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dynamite</RootNamespace>
@@ -64,6 +64,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "E:\Projects\Games\MSC Mods\Dynamite\bin\Release\Dynamite.dll" "E:\Steam\steamapps\common\My Summer Car\Mods\" /y</PostBuildEvent>
+    <PostBuildEvent>copy "$(TargetPath)" "$(MSCMODS)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

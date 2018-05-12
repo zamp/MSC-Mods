@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using MSCLoader;
 using UnityEngine;
@@ -7,11 +8,11 @@ namespace MobilePhone
 	public class MobilePhone : Mod
 	{
 		private bool m_isLoaded = false;
-		private AssetBundle m_bundle;
+
 		public override string ID { get { return "MobilePhone"; } }
 		public override string Name { get { return "MobilePhone"; } }
 		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "0.2.5"; } }
+		public override string Version { get { return "0.2.6"; } }
 		public override bool UseAssetsFolder { get { return true; }}
 
 		public override void OnLoad()
@@ -21,22 +22,30 @@ namespace MobilePhone
 
 		public override void Update()
 		{
-			if (Application.loadedLevelName == "GAME")
+			try
 			{
-				if (!m_isLoaded)
+
+				if (Application.loadedLevelName == "GAME")
 				{
-					if (GameObject.Find("PLAYER") == null ||
-						GameObject.Find("YARD/Building/Dynamics/Telephone/Logic") == null)
-						return;
+					if (!m_isLoaded)
+					{
+						if (GameObject.Find("PLAYER") == null ||
+						    GameObject.Find("YARD/Building/LIVINGROOM/Telephone/Logic") == null)
+							return;
 
-					SetupMod();
+						SetupMod();
 
-					m_isLoaded = true;
+						m_isLoaded = true;
+					}
+				}
+				else if (Application.loadedLevelName != "GAME" && m_isLoaded)
+				{
+					m_isLoaded = false;
 				}
 			}
-			else if (Application.loadedLevelName != "GAME" && m_isLoaded)
+			catch (Exception e)
 			{
-				m_isLoaded = false;
+				ModConsole.Error(e.ToString());
 			}
 		}
 
@@ -59,8 +68,8 @@ namespace MobilePhone
 			}
 			else
 			{
-				m_bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(path));
-				var prefab = m_bundle.LoadAsset<GameObject>("PhonePrefab");
+				var bundle = AssetBundle.CreateFromMemoryImmediate(File.ReadAllBytes(path));
+				var prefab = bundle.LoadAsset<GameObject>("PhonePrefab");
 				
 				var headPhone = GameObject.Instantiate(prefab);
 				GameObject.Destroy(headPhone.GetComponent<Collider>());
@@ -74,7 +83,7 @@ namespace MobilePhone
 				var phone = GameObject.Instantiate(prefab);
 				phone.AddComponent<PhoneBehaviour>().headPhone = headPhone;
 
-				m_bundle.Unload(false);
+				bundle.Unload(false);
 
 				ModConsole.Print("Mobile Phone mod Setup!");
 			}

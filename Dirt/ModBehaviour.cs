@@ -67,7 +67,6 @@ namespace MSCDirtMod
 		private float m_wheelDirtCutoff = 1;
 		private FsmBool m_handLeft;
 		private FsmBool m_handRight;
-		private Material m_oldBooMaterial;
 		private bool m_halt = false;
 		private bool m_isSetup;
 		private static ModBehaviour m_instance;

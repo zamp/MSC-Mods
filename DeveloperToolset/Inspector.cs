@@ -34,12 +34,12 @@ namespace DeveloperToolset
 			public bool showGlobalTransitions;
 		}
 
-		public static void DumpAll()
+		/*public static void DumpAll()
 		{
 			try
 			{
 				Search("");
-				m_dumpStream = new StreamWriter(Path.Combine(ModLoader.ModsFolder, "GameObject Dump.txt"));
+				m_dumpStream = new StreamWriter(Path.Combine( ModLoader. .ModsFolder, "GameObject Dump.txt"));
 				foreach (var rootTransform in m_rootTransforms)
 				{
 					DumpData(0, rootTransform);
@@ -51,7 +51,7 @@ namespace DeveloperToolset
 				m_dumpStream.Close();
 				ModConsole.Error(e.ToString());
 			}
-		}
+		}*/
 
 		private static void Write(int tabCount, string str)
 		{

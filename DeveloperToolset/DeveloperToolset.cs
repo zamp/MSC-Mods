@@ -6,10 +6,10 @@ namespace DeveloperToolset
 {
 	public class DeveloperToolset : Mod
 	{
-		public override string ID { get { return "DeveloperToolset"; } }
-		public override string Name { get { return "DeveloperToolset"; } }
-		public override string Author { get { return "zamp"; } }
-		public override string Version { get { return "1.0"; } }
+		public override string ID => "DeveloperToolset";
+		public override string Name => "DeveloperToolset";
+		public override string Author => "zamp";
+		public override string Version => "1.0";
 
 		public Keybind showGui = new Keybind("showgui", "Show GUI", KeyCode.Z, KeyCode.LeftControl);
 		public Keybind copy = new Keybind("copy", "Copy", KeyCode.C, KeyCode.LeftControl);
@@ -21,7 +21,6 @@ namespace DeveloperToolset
 
 		public override void OnLoad()
 		{
-			ConsoleCommand.Add(new DumpAll());
 			Keybind.Add(this, showGui);
 			Keybind.Add(this, raycastTweakable);
 		}
