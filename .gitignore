@@ -54,3 +54,5 @@
 /Dynamite/obj
 /Dynamite/bin
 /Dynamite/AssetBundle/Library
+/.vs/MSC Mods/v15/Server/sqlite3/*.lock
+/.vs/MSC Mods/v15/Server
