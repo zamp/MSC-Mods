@@ -4,6 +4,7 @@ using System.Reflection;
 using HutongGames.PlayMaker;
 using MSCLoader;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace RepairHammer
 {
@@ -36,7 +37,7 @@ namespace RepairHammer
 				var bodyFixFsm = jobs.Find("Bodyfix").GetComponent<PlayMakerFSM>();
 				var satsuma = PlayMakerGlobals.Instance.Variables.GetFsmGameObject("TheCar").Value;
 				var bodyMesh = new Mesh();
-
+				
 				var actions = bodyFixFsm.FsmStates.FirstOrDefault(x => x.Name == "Fix")?.Actions;
 				if (actions == null)
 				{
@@ -55,7 +56,21 @@ namespace RepairHammer
 					.FirstOrDefault(x => x.meshFilter.name.StartsWith("car body(xxxxx)", StringComparison.Ordinal));
 				var baseVerticesField =
 					deformable.GetType().GetField("baseVertices", BindingFlags.NonPublic | BindingFlags.Instance);
+
 				baseVerticesField.SetValue(deformable, bodyMesh.vertices);
+
+				// make sure the base vertices and actual vertice count is the same
+				var verticesField =
+					deformable.GetType().GetField("vertices", BindingFlags.NonPublic | BindingFlags.Instance);
+				baseVerticesField.SetValue(deformable, bodyMesh.vertices);
+
+				var baseVertices = (Vector3[])baseVerticesField.GetValue(deformable);
+				var vertices = (Vector3[])verticesField.GetValue(deformable);
+
+				if (baseVertices.Length != vertices.Length)
+				{
+					ModConsole.Error("Repair mesh discrepancy found. Please delete your mesh save.txt file.");
+				}
 			}
 			catch (Exception e)
 			{
@@ -99,7 +114,7 @@ namespace RepairHammer
 #if DEBUG
 				ModConsole.Error(e.ToString());
 #endif
-				// silently eat all errors (I can't be arsed to do null checks and whatever.")
+				// silently eat all errors
 			}
 		}
 
@@ -166,6 +181,14 @@ namespace RepairHammer
 							Object.Destroy(go.GetComponent<Collider>());
 							Object.Destroy(go.GetComponent<Rigidbody>());
 							go.transform.position = deformable.meshFilter.transform.TransformPoint(baseVertices[i]);
+							go.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+							Object.Destroy(go, 2f);
+
+							go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+							go.GetComponent<MeshRenderer>().material.color = Color.red;
+							Object.Destroy(go.GetComponent<Collider>());
+							Object.Destroy(go.GetComponent<Rigidbody>());
+							go.transform.position = deformable.meshFilter.transform.TransformPoint(vertices[i]);
 							go.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
 							Object.Destroy(go, 2f);
 						}
